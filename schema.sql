@@ -107,18 +107,19 @@ CREATE TABLE Account (
   email_id VARCHAR2(500),
   phone_number NUMBER(10,0),
   address VARCHAR2(500),
-  county VARCHAR2,
-  created _on CURRENT_TIMESTAMP,
+  county VARCHAR2(100),
+  created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   role_id NUMBER(2,0),
   modified_by_id NUMBER(16,0),
-  modified_on CURRENT_TIMESTAMP,
+  modified_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   account_status_id NUMBER(2,0),
   password_id NUMBER(20,0),
   PRIMARY KEY (account_id),
-  CONSTRAINT FK_Account.account_status_id
+  CONSTRAINT FK_Account_account_status_id
     FOREIGN KEY (account_status_id)
       REFERENCES account_status(status_id)
 );
+
 
 CREATE TABLE password (
   password_id NUMBER(20,0),
@@ -181,14 +182,14 @@ CREATE TABLE permissions (
 
 CREATE TABLE authentication_config (
   session_id NUMERIC(20,0),
-  login_time TIMESTAMP,
-  IP VARCHAR2,
-  timezone VARCHAR2,
+  login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  IP VARCHAR2(500),
+  timezone VARCHAR2(500),
   is_logout NUMERIC(1,0),
   logout_time TIMESTAMP,
   account_id NUMERIC(20,0),
   PRIMARY KEY (session_id),
-  CONSTRAINT FK_authentication_config.account_id
+  CONSTRAINT FK_authentication_config
     FOREIGN KEY (account_id)
       REFERENCES Account(account_id)
 );
