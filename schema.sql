@@ -5,7 +5,7 @@ CREATE TABLE oxygen_cylinder_details (
   available_status NUMERIC(1,0),
   created_on CURRENT_TIMESTAMP,
   updated_on CURRENT_TIMESTAMP,
-  PRIMARY KEY (cylinder_id)
+  CONSTRAINT OXYGEN_CYLINDER_DETAILS_PK PRIMARY KEY (CYLINDER_ID)
 );
 
 CREATE TABLE role (
@@ -193,5 +193,3 @@ CREATE TABLE authentication_config (
     FOREIGN KEY (account_id)
       REFERENCES Account(account_id)
 );
-
-
