@@ -854,3 +854,104 @@ DECLARE
 
 END;
 /
+
+
+
+
+
+-------------------------------------------------------------- INDEX Scripts -----------------------------------------------------------------------------------------
+
+------------------------------------------------ Rental Price Table Index ----------------------------------------------------------
+
+SET SERVEROUTPUT ON;
+declare
+    already_exists exception;
+    pragma exception_init( already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX price_index_idx ON rental_price(price_id, created_on)';
+    dbms_output.put_line('Index created on price table successfully');
+EXCEPTION
+    when already_exists then
+        dbms_output.put_line('Index price_index_idx is already present');
+END;
+/
+
+
+------------------------------------------------ Oxygen Cylinder Table Index ----------------------------------------------------------
+
+SET SERVEROUTPUT ON;
+declare
+    already_exists exception;
+    pragma exception_init( already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX plant_cylinder_mapping_idx ON OXYGEN_CYLINDER_DETAILS(cylinder_id, plant_id)';
+    dbms_output.put_line('Index created on Oxygen cylinder details table successfully');
+EXCEPTION
+    when already_exists then
+        dbms_output.put_line('Index plant_cylinder_mapping_idx is already present');
+END;
+/
+-------------------------------------------------------------------------- Account  Table Index ------------------------------------------------------------------------------------
+
+------------------------------------------------ Account-id and County Index ----------------------------------------------------------
+
+SET SERVEROUTPUT ON;
+declare
+    already_exists exception;
+    pragma exception_init( already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX account_county_idx ON ACCOUNT(account_id, county)';
+    dbms_output.put_line('Index created on Account-id and County columns of Account table successfully');
+EXCEPTION
+    when already_exists then
+        dbms_output.put_line('Index account_county_idx is already present');
+END;
+/
+
+------------------------------------------------ Account-id and Role-id Index ----------------------------------------------------------
+
+SET SERVEROUTPUT ON;
+declare
+    already_exists exception;
+    pragma exception_init( already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX account_role_idx ON ACCOUNT(account_id, role_id)';
+    dbms_output.put_line('Index created on Account-id and Role-id columns of Account table successfully');
+EXCEPTION
+    when already_exists then
+        dbms_output.put_line('Index account_role_idx is already present');
+END;
+/
+
+----------------------------------------------------------------- Orders Table indexes -------------------------------------------------------------------------------------------
+
+------------------------------------------------Order-id and booked_date -------------------------------------------------------- 
+
+SET SERVEROUTPUT ON;
+declare
+    already_exists exception;
+    pragma exception_init( already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX order_booked_date_idx ON ORDERS(order_id, booked_date)';
+    dbms_output.put_line('Index created on Order-id and Booked Date columns of Orders table successfully');
+EXCEPTION
+    when already_exists then
+        dbms_output.put_line('Index order_booked_date_idx is already present');
+END;
+/
+
+
+------------------------------------------------Order-id and booked_date -------------------------------------------------------- 
+
+SET SERVEROUTPUT ON;
+declare
+    already_exists exception;
+    pragma exception_init( already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX order_booked_date_idx ON ORDERS(order_id, booked_date)';
+    dbms_output.put_line('Index created on Order-id and Booked Date columns of Orders table successfully');
+EXCEPTION
+    when already_exists then
+        dbms_output.put_line('Index order_booked_date_idx is already present');
+END;
+/
