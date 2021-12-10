@@ -22,9 +22,15 @@ AS
     PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
                                                 price IN rental_price.price%TYPE);
     PROCEDURE insert_account_status(status_description IN account_status.status_description%TYPE);
+    PROCEDURE insert_password(acc_password IN password.password_hash%TYPE, 
+                                                password_salted IN password.password_salted%TYPE,
+                                                password_question IN password.password_question%TYPE
+                                                );
+    PROCEDURE insert_payment_method(description IN payment_method.description %TYPE);
 END INSERTION;
 /
 
+-- https://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_crypto.htm#:~:text=The%20following%20listing%20shows%20PL/SQL%20block%20encrypting%20and%20decrypting%20pre%2Ddefined%20%27input_string%27%20using%20256%2Dbit%20AES%20algorithm%20with%20Cipher%20Block%20Chaining%20and%20PKCS%235%20compliant%20padding.
 
 CREATE OR REPLACE PACKAGE BODY INSERTION
     AS
@@ -176,7 +182,77 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_account_status;
+           
+            PROCEDURE insert_password(acc_password IN password.password_hash%TYPE, 
+                                                password_salted IN password.password_salted%TYPE,
+                                                password_question IN password.password_question%TYPE
+                                                )
+            IS 
+--                encrypted_password_hash_raw      RAW (2000);
+--                encrypted_password_answer_hash_raw      RAW (2000);
+--                num_key_bytes      NUMBER := 256/8;        -- key length 256 bits (32 bytes)
+--                key_bytes_raw      RAW (32);               -- stores 256-bit encryption key
+--                encryption_type    PLS_INTEGER :=          -- total encryption type
+--                            DBMS_CRYPTO.ENCRYPT_AES256
+--                          + DBMS_CRYPTO.CHAIN_CBC
+--                          + DBMS_CRYPTO.PAD_PKCS5;
+
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                   DBMS_OUTPUT.PUT_LINE ( 'Original string: ' || acc_password);
+
+--                   encrypted_password_hash_raw := DBMS_CRYPTO.ENCRYPT
+--                          (
+--                             src => UTL_I18N.STRING_TO_RAW (acc_password,  'AL32UTF8'),
+--                             typ => encryption_type,
+--                             key => key_bytes_raw
+--                          );
+--                 encrypted_password_answer_hash_raw := DBMS_CRYPTO.ENCRYPT
+--                          (
+--                             src => UTL_I18N.STRING_TO_RAW (password_answer_hash,  'AL32UTF8'),
+--                             typ => encryption_type,
+--                             key => key_bytes_raw
+--                          );
+                insert into password(PASSWORD_ID, PASSWORD_HASH, PASSWORD_SALTED, PASSWORD_QUESTION, 
+                                        created_date, updated_date) 
+                        VALUES (DEFAULT, acc_password,  password_salted, PASSWORD_QUESTION, DEFAULT , DEFAULT) ;
+                dbms_output.put_line('Row inserted into Password table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into PassowrdTable');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_password;
+            
+            
+           PROCEDURE insert_payment_method(description IN payment_method.description%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into payment_method(PAYMENT_METHOD_ID, description, created_on, updated_on) 
+                        VALUES (DEFAULT, description , DEFAULT, DEFAULT) ;
+                dbms_output.put_line('Row inserted into Payment Method table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Payment Method Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_payment_method;
             
     end INSERTION;
 /
+
+
 

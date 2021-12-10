@@ -64,3 +64,14 @@ execute insertion.insert_rental_price(TIMESTAMP '10-05-21 09:26:50.12', 20);
 execute insertion.insert_account_status('Active');
 execute insertion.insert_account_status('Suspended');
 execute insertion.insert_account_status('Deleted');
+
+--------------------------------------------------------- Payment  MethodTable INSERTION ---------------------------------------------------------
+
+execute insertion.insert_payment_method('Credit Card');
+execute insertion.insert_payment_method('Debit Card');
+execute insertion.insert_payment_method('eCheck');
+execute insertion.insert_payment_method('Paypal');
+
+------------------------------------------------------------ Password Method Table insertion----------------------------------------------------------
+
+execute insertion.insert_password('dmdddmdd', 'dmdddmdd2133', 'when is birthday');
