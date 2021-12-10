@@ -115,20 +115,20 @@ END;
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure payment_status_table_creation 
-IS 
+create or replace procedure payment_status_table_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE PAYMENT_STATUS (
                                   payment_status_code INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                                   status_description VARCHAR2(1500),
                                   created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                  PRIMARY KEY (payment_status_code))' ;     
+                                  PRIMARY KEY (payment_status_code))' ;
      EXECUTE IMMEDIATE table_name;
 end payment_status_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -154,36 +154,36 @@ DECLARE
                     payment_status_table_creation;
                     dbms_output.put_line('Table Payment statys table is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in Payment status table creation');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 --------------------------------------------------------------------- PATIENT DETAILS TABLE ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure patient_details_table_creation 
-IS 
+create or replace procedure patient_details_table_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE patient_details (
                               covid_report_id NUMERIC(8,0),
                               name VARCHAR2(100),
                               address VARCHAR2(1000),
                               covid_status NUMERIC(1,0),
                               county VARCHAR2(500),
-                              PRIMARY KEY (covid_report_id))' ;     
+                              PRIMARY KEY (covid_report_id))' ;
      EXECUTE IMMEDIATE table_name;
 end patient_details_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -209,14 +209,14 @@ DECLARE
                     patient_details_table_creation;
                     dbms_output.put_line('Table patient details is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in Patient table creation');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 
@@ -225,20 +225,20 @@ END;
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure rental_price_table_creation 
-IS 
+create or replace procedure rental_price_table_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE rental_price (
                               price_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               price NUMERIC,
-                              PRIMARY KEY (price_id))' ;     
+                              PRIMARY KEY (price_id))' ;
      EXECUTE IMMEDIATE table_name;
 end rental_price_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -264,24 +264,24 @@ DECLARE
                     rental_price_table_creation;
                     dbms_output.put_line('Table rental price is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating rental price table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 -------------------------------------------------------------------- PASSWORD TABLE ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure password_table_creation 
-IS 
+create or replace procedure password_table_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE password (
                                   password_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                                   password_hash VARCHAR2(500),
@@ -290,12 +290,12 @@ BEGIN
                                   passsword_answer_hash VARCHAR2(500),
                                   created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                   updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                  PRIMARY KEY (password_id))' ;     
+                                  PRIMARY KEY (password_id))' ;
      EXECUTE IMMEDIATE table_name;
 end password_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -321,35 +321,35 @@ DECLARE
                     password_table_creation;
                     dbms_output.put_line('Table Password is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Password table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 -------------------------------------------------------------------- ACCOUNT STATUS TABLE ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure account_status_table_creation 
-IS 
+create or replace procedure account_status_table_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE account_status (
                               status_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               status_description VARCHAR2(500),
                                 created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                 updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                PRIMARY KEY (status_id))' ;     
+                                PRIMARY KEY (status_id))' ;
      EXECUTE IMMEDIATE table_name;
 end account_status_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -375,23 +375,23 @@ DECLARE
                     account_status_table_creation;
                     dbms_output.put_line('Table Account status is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating account status table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 --------------------------------------------------------------------- CREATING ROLE TABLE ----------------------------------------------------------------------------------------
 SET SERVEROUTPUT ON;
 
-create or replace procedure role_table_creation 
-IS 
+create or replace procedure role_table_creation
+IS
     table_name varchar2(4000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE ROLE (
                               role_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               role_description VARCHAR2(500),
@@ -403,7 +403,7 @@ BEGIN
 end role_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -429,24 +429,24 @@ DECLARE
                     role_table_creation;
                     dbms_output.put_line('Table ROLE is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in role table creation');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END;    
+END;
 /
 
 -------------------------------------------------------------------- Permissions method TABLE ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure permissions_method_creation 
-IS 
+create or replace procedure permissions_method_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE permissions (
                               permission_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               role_id NUMBER(16,0),
@@ -455,12 +455,12 @@ BEGIN
                               created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                 CONSTRAINT PERMISSIONS_FK_ROLE_ID FOREIGN KEY(ROLE_ID)
                                     REFERENCES ROLE(ROLE_ID),
-                              PRIMARY KEY (permission_id))' ;     
+                              PRIMARY KEY (permission_id))' ;
      EXECUTE IMMEDIATE table_name;
 end permissions_method_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -486,36 +486,36 @@ DECLARE
                     permissions_method_creation;
                     dbms_output.put_line('Table Permissions method is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Permissions table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 -------------------------------------------------------------------- Payment method TABLE ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure payment_method_creation 
-IS 
+create or replace procedure payment_method_creation
+IS
     table_name varchar2(1000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE payment_method (
                               payment_method_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               description VARCHAR2(500),
                               created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               PRIMARY KEY (payment_method_id)
-                            )' ;     
+                            )' ;
      EXECUTE IMMEDIATE table_name;
 end payment_method_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -541,14 +541,14 @@ DECLARE
                     payment_method_creation;
                     dbms_output.put_line('Table Payment method is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Payment method table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 
@@ -556,10 +556,10 @@ END;
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure renter_payment_checkout_creation 
-IS 
+create or replace procedure renter_payment_checkout_creation
+IS
     table_name varchar2(4000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE renter_payment_checkout (
                               transaction_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL ,
                               payment_method_id NUMERIC(2,0),
@@ -568,11 +568,11 @@ BEGIN
                               payment_made NUMERIC(4,2),
                               payment_due NUMERIC(4,2),
                               PRIMARY KEY (transaction_id),
-                              CONSTRAINT FK_renter_payment_checkout FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id))' ;     
+                              CONSTRAINT FK_renter_payment_checkout FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id))' ;
      EXECUTE IMMEDIATE table_name;
 end renter_payment_checkout_creation;
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -598,14 +598,14 @@ DECLARE
                     renter_payment_checkout_creation;
                     dbms_output.put_line('Table Renter Payment Checkout table is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Renter Payment Checkout table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 
@@ -613,10 +613,10 @@ END;
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure account_table_creation 
-IS 
+create or replace procedure account_table_creation
+IS
     table_name varchar2(4000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE Account (
                               account_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               display_name VARCHAR2(50),
@@ -633,12 +633,12 @@ BEGIN
                               PRIMARY KEY (account_id),
                               CONSTRAINT FK_Account_status_id FOREIGN KEY (account_status_id) REFERENCES account_status(status_id),
                               CONSTRAINT FK_Account_password_id FOREIGN KEY (password_id) REFERENCES PASSWORD(password_id),
-                              CONSTRAINT FK_Account_role_id FOREIGN KEY (role_id) REFERENCES ROLE(role_id))' ;     
+                              CONSTRAINT FK_Account_role_id FOREIGN KEY (role_id) REFERENCES ROLE(role_id))' ;
      EXECUTE IMMEDIATE table_name;
 end account_table_creation;
 
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -664,24 +664,24 @@ DECLARE
                     account_table_creation;
                     dbms_output.put_line('Table Account is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Account table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 -------------------------------------------------------------------- Account Role Mapping History TABLE ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure account_role_mapping_history_creation 
-IS 
+create or replace procedure account_role_mapping_history_creation
+IS
     table_name varchar2(4000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE account_role_mapping_history (
                               mapping_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                               account_id NUMBER(20, 0),
@@ -690,11 +690,11 @@ BEGIN
                               created_by_id NUMBER(16,0),
                               PRIMARY KEY (mapping_id),
                               CONSTRAINT FK_account_role_mapping_history_account_id FOREIGN KEY (account_id) REFERENCES ACCOUNT(account_id),
-                              CONSTRAINT FK_account_role_mapping_history_role_id FOREIGN KEY (role_id) REFERENCES ROLE(role_id))' ;     
+                              CONSTRAINT FK_account_role_mapping_history_role_id FOREIGN KEY (role_id) REFERENCES ROLE(role_id))' ;
      EXECUTE IMMEDIATE table_name;
 end account_role_mapping_history_creation;
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -720,24 +720,24 @@ DECLARE
                     account_role_mapping_history_creation;
                     dbms_output.put_line('Table Account Role Mapping is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Account Role Mapping table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 -------------------------------------------------------------------- Authentication Config Table ----------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 
-create or replace procedure authentication_config_creation 
-IS 
+create or replace procedure authentication_config_creation
+IS
     table_name varchar2(4000);
-BEGIN 
+BEGIN
     table_name:= 'CREATE TABLE authentication_config (
                           session_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                           login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -747,11 +747,11 @@ BEGIN
                           logout_time TIMESTAMP,
                           account_id NUMERIC(20,0),
                           PRIMARY KEY (session_id),
-                          CONSTRAINT FK_authentication_config FOREIGN KEY (account_id) REFERENCES ACCOUNT(account_id))' ;     
+                          CONSTRAINT FK_authentication_config FOREIGN KEY (account_id) REFERENCES ACCOUNT(account_id))' ;
      EXECUTE IMMEDIATE table_name;
 end authentication_config_creation;
 /
-DECLARE 
+DECLARE
         t_name varchar2(100);
         row_cnt NUMBER;
     BEGIN
@@ -777,14 +777,14 @@ DECLARE
                     authentication_config_creation;
                     dbms_output.put_line('Table Authentication config is created ');
                     dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------------------------------');
-                    
+
                 END;
             when others then
                     dbms_output.put_line(SQLERRM);
                     dbms_output.put_line('Something went wrong in creating Authentication config table');
                     dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
 
-END; 
+END;
 /
 
 
@@ -925,7 +925,7 @@ END;
 
 ----------------------------------------------------------------- Orders Table indexes -------------------------------------------------------------------------------------------
 
-------------------------------------------------Order-id and booked_date -------------------------------------------------------- 
+------------------------------------------------Order-id and booked_date --------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 declare
@@ -941,7 +941,7 @@ END;
 /
 
 
-------------------------------------------------Order-id and booked_date -------------------------------------------------------- 
+------------------------------------------------Order-id and booked_date --------------------------------------------------------
 
 SET SERVEROUTPUT ON;
 declare

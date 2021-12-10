@@ -4,7 +4,9 @@
 
 execute insertion.insert_role('Manager', 'Nithin', null);
 execute insertion.insert_role('Employee', 'Rajesh', 1);
-
+execute insertion.insert_role('Customer', 'Namratha', 2);
+execute insertion.insert_role('Customer', 'Sai', 3);
+execute insertion.insert_role('Employee', 'Liam', 4);
 
 --------------------------------------------------------- OXYGEN CYLINDER PLANT INSERTION ---------------------------------------------------------
 
@@ -14,6 +16,14 @@ execute insertion.insert_oxygen_plant_details('Sam Needs', '234, Gandhi Street',
 execute insertion.insert_oxygen_plant_details('John Clinic', '934, Peters Street', 6176859694, 'Suffolk', 'josephplant@gmail.com');
 execute insertion.insert_oxygen_plant_details('Tim International Hospital', '214, Roxbury Street', 6176859695, 'Suffolk', 'josephplant@gmail.com');
 execute insertion.insert_oxygen_plant_details('Scott Multispeciality', '224, Boylston Street', 6176859696, 'Franklin', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston Medicity', '197, Heath Street', 6176854567, 'Worcester', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('HITAM Multispeciality Hospital', '111, Mission Hill', 6177459696, 'Norfolk', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Apollo', '881, Boylston Street', 6176859696, 'Franklin', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Kamineni Hospital', '179, Rose Street', 6145336790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Miracle Clinic', '120, Longwood', 6111159696, 'Norfolk', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Hope Hospital', '179, Copley', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+
+
 
 --------------------------------------------------------- OXYGEN CYLINDER DETAILS INSERTION ---------------------------------------------------------
 
@@ -43,6 +53,12 @@ execute insertion.insert_payment_status('Cancelled');
 
 execute insertion.insert_patient_details(34567890, 'Rafi', '567, Park street', 1, 'Suffolk');
 execute insertion.insert_patient_details(12367890, 'Ravi', '27, North Station street', 1, 'Suffolk');
+execute insertion.insert_patient_details(34512690, 'Robert', '766, Heath street', 1, 'Worcester');
+execute insertion.insert_patient_details(12365466, 'James', '47, Copley ', 1, 'Nantucket');
+execute insertion.insert_patient_details(34567233, 'Jimmy', '12, Park street', 1, 'Suffolk');
+execute insertion.insert_patient_details(12367530, 'Sarah', '35, Darling street', 1, 'Suffolk');
+execute insertion.insert_patient_details(87993890, 'Emily', '98, Roxbury street', 1, 'Suffolk');
+execute insertion.insert_patient_details(34522718, 'Dev', '11, Roxbury street', 1, 'Suffolk');
 
 
 --------------------------------------------------------- Rental Price Table INSERTION ---------------------------------------------------------
@@ -98,3 +114,5 @@ execute insertion.insert_account_role_mapping_table(1, 2, null);
 
 -------------------------------------------------------------- Authentication Config Insertion --------------------------------------------------------
 
+
+execute insertion.insert_permissions_method();
