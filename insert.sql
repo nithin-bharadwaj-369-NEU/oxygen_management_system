@@ -19,6 +19,8 @@ AS
     PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
                             name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
                             covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE);
+    PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
+                                                price IN rental_price.price%TYPE);
 END INSERTION;
 /
 
@@ -132,7 +134,27 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line('---------------------------------------------------');
             end insert_patient_details;
     
-    
+        PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
+                                                price IN rental_price.price%TYPE)
+                IS 
+                BEGIN
+                    dbms_output.put_line('---------------------------------------------------');
+                    insert into rental_price(price_id, created_on, price) 
+                            VALUES (DEFAULT, created_on, price) ;
+                    dbms_output.put_line('Row inserted into Rental price table');
+                    dbms_output.put_line('---------------------------------------------------');
+                commit;
+                exception
+                    when dup_val_on_index then
+                       dbms_output.put_line('duplicate value found || insert different value');
+                    when others then
+                       dbms_output.put_line('Error while inserting data into Rental price Table');
+                        rollback;
+                       dbms_output.put_line('The error encountered is: ');
+                       dbms_output.put_line(dbms_utility.format_error_stack);
+                       dbms_output.put_line('---------------------------------------------------');
+                end insert_rental_price;
+        
     end INSERTION;
 /
 

@@ -173,7 +173,7 @@ IS
     table_name varchar2(1000);
 BEGIN 
     table_name:= 'CREATE TABLE patient_details (
-                              covid_report_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
+                              covid_report_id NUMERIC(8,0),
                               name VARCHAR2(100),
                               address VARCHAR2(1000),
                               covid_status NUMERIC(1,0),

@@ -45,3 +45,15 @@ execute insertion.insert_patient_details(34567890, 'Rafi', '567, Park street', 1
 execute insertion.insert_patient_details(12367890, 'Ravi', '27, North Station street', 1, 'Suffolk');
 
 
+--------------------------------------------------------- Rental Price Table INSERTION ---------------------------------------------------------
+-- TIMESTAMP format - 'DD-MM-YY HH:MM:SS.FF'
+execute insertion.insert_rental_price(TIMESTAMP '10-12-21 09:26:50.12', 200);
+execute insertion.insert_rental_price(TIMESTAMP '10-11-21 09:26:50.12', 70);
+execute insertion.insert_rental_price(TIMESTAMP '10-10-21 09:26:50.12', 100);
+execute insertion.insert_rental_price(TIMESTAMP '10-09-21 09:26:50.12', 20);
+execute insertion.insert_rental_price(TIMESTAMP '10-08-21 09:26:50.12', 20);
+execute insertion.insert_rental_price(TIMESTAMP '10-07-21 09:26:50.12', 30);
+execute insertion.insert_rental_price(TIMESTAMP '10-06-21 09:26:50.12', 20);
+execute insertion.insert_rental_price(TIMESTAMP '10-05-21 09:26:50.12', 20);
+
+--insert into rental_price VALUES(DEFAULT, TIMESTAMP '2021-01-31 09:26:50.12', 200.0);
