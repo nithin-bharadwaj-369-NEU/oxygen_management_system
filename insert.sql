@@ -3,12 +3,16 @@
 --1) Create Package Specs
 --2) Create Package Body.
 
+DROP PACKAGE INSERTION;
+
 CREATE OR REPLACE PACKAGE INSERTION
 AS
    PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE, 
         display_name in role.display_name%TYPE, 
-        CREATED_BY_ID in role.created_by_id%TYPE,
-        created_on in role.created_on%TYPE);
+        CREATED_BY_ID in role.created_by_id%TYPE);
+    PROCEDURE insert_oxygen_plant_details(name in oxygen_cylinder_plant.name%TYPE,
+        address in oxygen_cylinder_plant.address%TYPE, phone_number in oxygen_cylinder_plant.phone_number%TYPE,
+        county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE);
 END INSERTION;
 /
 
@@ -17,9 +21,8 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
     AS
         PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE, 
         display_name in role.display_name%TYPE, 
-        CREATED_BY_ID in role.created_by_id%TYPE,
-        created_on in role.created_on%TYPE)
-        AS 
+        CREATED_BY_ID in role.created_by_id%TYPE)
+        IS 
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
             insert into ROLE(ROLE_ID, ROLE_DESCRIPTION, DISPLAY_NAME,
@@ -28,15 +31,37 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
             dbms_output.put_line('---------------------------------------------------');
         commit;
         exception
-        when dup_val_on_index then
-           dbms_output.put_line('duplicate value found || insert different value');
-        when others then
-           dbms_output.put_line('Error while inserting data into ROLE Table');
-            rollback;
-           dbms_output.put_line('The error encountered is: ');
-           dbms_output.put_line(dbms_utility.format_error_stack);
-           dbms_output.put_line('---------------------------------------------------');
+            when dup_val_on_index then
+               dbms_output.put_line('duplicate value found || insert different value');
+            when others then
+               dbms_output.put_line('Error while inserting data into ROLE Table');
+                rollback;
+               dbms_output.put_line('The error encountered is: ');
+               dbms_output.put_line(dbms_utility.format_error_stack);
+               dbms_output.put_line('---------------------------------------------------');
         end INSERT_ROLE;
+        
+        PROCEDURE insert_oxygen_plant_details(name in oxygen_cylinder_plant.name%TYPE,
+        address in oxygen_cylinder_plant.address%TYPE, phone_number in oxygen_cylinder_plant.phone_number%TYPE,
+        county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE)
+        IS 
+        BEGIN
+            dbms_output.put_line('---------------------------------------------------');
+            insert into oxygen_cylinder_plant(PLANT_ID, NAME, ADDRESS, PHONE_NUMBER, COUNTY, EMAIL_ID, 
+                                    CREATED_ON, UPDATED_ON) VALUES (DEFAULT, name, address, phone_number, county, email_id, DEFAULT, DEFAULT) ;
+            dbms_output.put_line('Row inserted into oxygen cylinder plant table');
+            dbms_output.put_line('---------------------------------------------------');
+        commit;
+        exception
+            when dup_val_on_index then
+               dbms_output.put_line('duplicate value found || insert different value');
+            when others then
+               dbms_output.put_line('Error while inserting data into OXygen Cylidner Plant Table');
+                rollback;
+               dbms_output.put_line('The error encountered is: ');
+               dbms_output.put_line(dbms_utility.format_error_stack);
+               dbms_output.put_line('---------------------------------------------------');
+        end insert_oxygen_plant_details;
     
     end INSERTION;
 /
