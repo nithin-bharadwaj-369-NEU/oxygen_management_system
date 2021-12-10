@@ -37,3 +37,11 @@ execute insertion.insert_payment_status('Pending');
 execute insertion.insert_payment_status('Failed');
 execute insertion.insert_payment_status('Refunded');
 execute insertion.insert_payment_status('Cancelled');
+
+
+--------------------------------------------------------- Patient Details Table INSERTION ---------------------------------------------------------
+
+execute insertion.insert_patient_details(34567890, 'Rafi', '567, Park street', 1, 'Suffolk');
+execute insertion.insert_patient_details(12367890, 'Ravi', '27, North Station street', 1, 'Suffolk');
+
+

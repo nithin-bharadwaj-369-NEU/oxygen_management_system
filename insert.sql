@@ -16,6 +16,9 @@ AS
     PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE);
     PROCEDURE insert_payment_status(status_description  IN payment_status.status_description%TYPE);
+    PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
+                            name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
+                            covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE);
 END INSERTION;
 /
 
@@ -106,6 +109,28 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_payment_status;
+    
+        PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
+                            name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
+                            covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into patient_details(covid_report_id, name, address, covid_status, county) 
+                        VALUES (covid_report_id, name, address, covid_status, county) ;
+                dbms_output.put_line('Row inserted into Patient Details table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Patient Details Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_patient_details;
     
     
     end INSERTION;
