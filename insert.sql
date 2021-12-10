@@ -41,34 +41,3 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
     end INSERTION;
 /
 
-
---select * from role
---
---
---
---DECLARE
---  ROLE_DESCRIPTION VARCHAR2(500);
---  DISPLAY_NAME VARCHAR2(50);
---  CREATED_BY_ID NUMBER;
---  CREATED_ON TIMESTAMP;
---BEGIN
---  ROLE_DESCRIPTION := 'Manager';
---  DISPLAY_NAME := 'Nithin';
---  CREATED_BY_ID := NULL;
---  CREATED_ON := SYSTIMESTAMP - INTERVAL '1' minute;
---
---  INSERT_ROLE(
---    ROLE_DESCRIPTION => ROLE_DESCRIPTION,
---    DISPLAY_NAME => DISPLAY_NAME,
---    CREATED_BY_ID => CREATED_BY_ID,
---    CREATED_ON => CREATED_ON
---  );
-----rollback; 
---END;
---
-execute insertion.insert_role('Manager4', 'Nithin5', null, systimestamp);
---
-
-
-
-
