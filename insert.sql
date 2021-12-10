@@ -15,6 +15,7 @@ AS
         county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE);
     PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE);
+    PROCEDURE insert_payment_status(status_description  IN payment_status.status_description%TYPE);
 END INSERTION;
 /
 
@@ -85,6 +86,27 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_oxygen_cylinder_details;
+    
+        PROCEDURE insert_payment_status(status_description IN payment_status.status_description%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into payment_status(PAYMENT_STATUS_CODE, status_description, created_on) 
+                        VALUES (DEFAULT, status_description , DEFAULT) ;
+                dbms_output.put_line('Row inserted into Payment status table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Payment Status Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_payment_status;
+    
     
     end INSERTION;
 /

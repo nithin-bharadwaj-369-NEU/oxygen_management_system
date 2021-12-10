@@ -30,3 +30,10 @@ execute insertion.insert_oxygen_cylinder_details(2, 300, 1);
 execute insertion.insert_oxygen_cylinder_details(3, 500, 1);
 
 
+--------------------------------------------------------- Payment Status Table INSERTION ---------------------------------------------------------
+
+execute insertion.insert_payment_status('Complete');
+execute insertion.insert_payment_status('Pending');
+execute insertion.insert_payment_status('Failed');
+execute insertion.insert_payment_status('Refunded');
+execute insertion.insert_payment_status('Cancelled');
