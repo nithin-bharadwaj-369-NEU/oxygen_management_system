@@ -741,8 +741,8 @@ BEGIN
     table_name:= 'CREATE TABLE authentication_config (
                           session_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
                           login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                          IP VARCHAR2(500),
-                          timezone VARCHAR2(500),
+                          ip_address VARCHAR2(500),
+                          time_zone_data VARCHAR2(500),
                           is_logout NUMERIC(1,0),
                           logout_time TIMESTAMP,
                           account_id NUMERIC(20,0),

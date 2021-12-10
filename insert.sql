@@ -42,7 +42,17 @@ AS
                                             role_id  IN account_role_mapping_history.role_id%TYPE,
                                             created_by_id  IN account_role_mapping_history.created_by_id%TYPE);
    
+    PROCEDURE insert_authentication_config(ip_address_value IN authentication_config.ip_address%TYPE,
+                                                timezone_value IN authentication_config.time_zone_data%TYPE,
+                                                logout IN authentication_config.is_logout%TYPE,
+                                                logout_time IN authentication_config.logout_time%TYPE,
+                                                account_id IN authentication_config.account_id%TYPE);
     
+    PROCEDURE insert_renter_payment_checkout(payment_id IN renter_payment_checkout.payment_method_id%TYPE,
+                                                acc_id IN renter_payment_checkout.account_id%TYPE,
+                                                details_data IN  renter_payment_checkout.details%TYPE,
+                                                payment_made_data IN  renter_payment_checkout.payment_made%TYPE,
+                                                payment_due  IN renter_payment_checkout.payment_due%TYPE);
 END INSERTION;
 /
 
@@ -340,6 +350,53 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line('---------------------------------------------------');
             end insert_account_role_mapping_table;
             
+           PROCEDURE insert_authentication_config(ip_address_value IN authentication_config.ip_address%TYPE,
+                                                timezone_value IN authentication_config.time_zone_data%TYPE,
+                                                logout IN authentication_config.is_logout%TYPE,
+                                                logout_time IN authentication_config.logout_time%TYPE,
+                                                account_id IN authentication_config.account_id%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into authentication_config(SESSION_ID, LOGIN_TIME, IP_ADDRESS, TIME_ZONE_DATA, IS_LOGOUT, LOGOUT_TIME , ACCOUNT_ID) 
+                        VALUES (DEFAULT, DEFAULT, ip_address_value, timezone_value, logout,  null, account_id) ;
+                dbms_output.put_line('Row inserted into authentication_config table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into authentication_config Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_authentication_config;
+           
+           PROCEDURE insert_renter_payment_checkout(payment_id IN renter_payment_checkout.payment_method_id%TYPE,
+                                                acc_id IN renter_payment_checkout.account_id%TYPE,
+                                                details_data IN  renter_payment_checkout.details%TYPE,
+                                                payment_made_data IN  renter_payment_checkout.payment_made%TYPE,
+                                                payment_due  IN renter_payment_checkout.payment_due%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into renter_payment_checkout(transaction_id, payment_method_id, account_id, details, payment_made, payment_due) 
+                        VALUES (DEFAULT, payment_id, acc_id, details_data, payment_made_data,  payment_due) ;
+                dbms_output.put_line('Row inserted into Renter Payment Checkout table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Renter Payment Checkout Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_renter_payment_checkout;
            
             
     end INSERTION;

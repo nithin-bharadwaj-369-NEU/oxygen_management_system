@@ -115,4 +115,14 @@ execute insertion.insert_account_role_mapping_table(1, 2, null);
 -------------------------------------------------------------- Authentication Config Insertion --------------------------------------------------------
 
 
-execute insertion.insert_permissions_method();
+execute insertion.insert_authentication_config('192.168.43.210', 'America/New_York', 0, null, 1);
+
+
+
+-------------------------------------------------------------- Renter Payment Checkout Insertion --------------------------------------------------------
+
+
+execute insertion.insert_renter_payment_checkout(4, 1, 'Oxygen cylinder asap', 20, 80);
+
+
+
