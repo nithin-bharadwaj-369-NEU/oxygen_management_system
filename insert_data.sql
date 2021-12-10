@@ -127,4 +127,4 @@ execute insertion.insert_renter_payment_checkout(4, 1, 'Oxygen cylinder asap', 2
 
 -------------------------------------------------------------- Orders Table Insertion --------------------------------------------------------
 
-execute insertion.insert_orders();
+execute insertion.insert_order(1, 1, 1, 2, 8, 5, 34567890, '10-09-21 09:26:50.12', '10-10-21 09:26:50.12');
