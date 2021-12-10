@@ -27,6 +27,8 @@ AS
                                                 password_question IN password.password_question%TYPE
                                                 );
     PROCEDURE insert_payment_method(description IN payment_method.description %TYPE);
+    PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
+                                            type IN permissions.type%TYPE, description  IN permissions.description%TYPE);
 END INSERTION;
 /
 
@@ -251,6 +253,29 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_payment_method;
+            
+            PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
+                                            type IN permissions.type%TYPE, description  IN permissions.description%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into permissions(PERMISSION_ID, ROLE_ID, TYPE, DESCRIPTION, created_on) 
+                        VALUES (DEFAULT, role_id , type, description , DEFAULT) ;
+                dbms_output.put_line('Row inserted into Permissions table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Permissions Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_permissions_method;
+            
+            
             
     end INSERTION;
 /

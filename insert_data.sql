@@ -75,3 +75,10 @@ execute insertion.insert_payment_method('Paypal');
 ------------------------------------------------------------ Password Method Table insertion----------------------------------------------------------
 
 execute insertion.insert_password('dmdddmdd', 'dmdddmdd2133', 'when is birthday');
+
+
+
+------------------------------------------------------------ Permissions Table insertion----------------------------------------------------------
+
+
+execute insertion.insert_permissions_method();
