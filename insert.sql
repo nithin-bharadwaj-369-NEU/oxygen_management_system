@@ -21,6 +21,7 @@ AS
                             covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE);
     PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
                                                 price IN rental_price.price%TYPE);
+    PROCEDURE insert_account_status(status_description IN account_status.status_description%TYPE);
 END INSERTION;
 /
 
@@ -155,6 +156,27 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                        dbms_output.put_line('---------------------------------------------------');
                 end insert_rental_price;
         
+        
+         PROCEDURE insert_account_status(status_description IN account_status.status_description%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into account_status(STATUS_ID, status_description, created_on, updated_on) 
+                        VALUES (DEFAULT, status_description , DEFAULT, DEFAULT) ;
+                dbms_output.put_line('Row inserted into Account status table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Account Status Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_account_status;
+            
     end INSERTION;
 /
 

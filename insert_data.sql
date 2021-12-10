@@ -57,3 +57,10 @@ execute insertion.insert_rental_price(TIMESTAMP '10-06-21 09:26:50.12', 20);
 execute insertion.insert_rental_price(TIMESTAMP '10-05-21 09:26:50.12', 20);
 
 --insert into rental_price VALUES(DEFAULT, TIMESTAMP '2021-01-31 09:26:50.12', 200.0);
+
+
+--------------------------------------------------------- Account status Table INSERTION ---------------------------------------------------------
+
+execute insertion.insert_account_status('Active');
+execute insertion.insert_account_status('Suspended');
+execute insertion.insert_account_status('Deleted');
