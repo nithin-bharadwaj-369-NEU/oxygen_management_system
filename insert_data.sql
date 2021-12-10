@@ -81,4 +81,20 @@ execute insertion.insert_password('dmdddmdd', 'dmdddmdd2133', 'when is birthday'
 ------------------------------------------------------------ Permissions Table insertion----------------------------------------------------------
 
 
-execute insertion.insert_permissions_method();
+execute insertion.insert_permissions_method(2, 'MAN', 'Access to all pages');
+
+
+------------------------------------------------------------ Account Table insertion----------------------------------------------------------
+
+execute insertion.insert_account_table('Kiran', 'kiran.asd@gmail.com', 8908900980, 'St Mkasd, Heath Street', 'Sufflok', 2, null, 1, 1);
+
+
+
+-------------------------------------------------------------- Account role mapping history Insertion --------------------------------------------------------
+
+execute insertion.insert_account_role_mapping_table(1, 2, null);
+
+
+
+-------------------------------------------------------------- Authentication Config Insertion --------------------------------------------------------
+

@@ -29,6 +29,20 @@ AS
     PROCEDURE insert_payment_method(description IN payment_method.description %TYPE);
     PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
                                             type IN permissions.type%TYPE, description  IN permissions.description%TYPE);
+    PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE, 
+                                            email_id  IN Account.email_id%TYPE,
+                                            phone_number IN Account.phone_number%TYPE,
+                                            address  IN Account.address%TYPE,
+                                            county IN Account.county%TYPE,
+                                            role_id IN Account.role_id%TYPE,
+                                            modified_by_id IN ACCOUNT.modified_by_id%TYPE,
+                                            account_status_id  IN ACCOUNT.account_status_id%TYPE,
+                                            password_id IN ACCOUNT.password_id%TYPE );
+    PROCEDURE insert_account_role_mapping_table(account_id  IN account_role_mapping_history.account_id%TYPE,
+                                            role_id  IN account_role_mapping_history.role_id%TYPE,
+                                            created_by_id  IN account_role_mapping_history.created_by_id%TYPE);
+   
+    
 END INSERTION;
 /
 
@@ -275,7 +289,58 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line('---------------------------------------------------');
             end insert_permissions_method;
             
+            PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE, 
+                                            email_id  IN Account.email_id%TYPE,
+                                            phone_number IN Account.phone_number%TYPE,
+                                            address  IN Account.address%TYPE,
+                                            county IN Account.county%TYPE,
+                                            role_id IN Account.role_id%TYPE,
+                                            modified_by_id IN ACCOUNT.modified_by_id%TYPE,
+                                            account_status_id  IN ACCOUNT.account_status_id%TYPE,
+                                            password_id IN ACCOUNT.password_id%TYPE )
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into account(ACCOUNT_ID, DISPLAY_NAME, EMAIL_ID,  ROLE_ID, PHONE_NUMBER, ADDRESS, COUNTY, created_on ,
+                 MODIFIED_BY_ID, MODIFIED_ON , ACCOUNT_STATUS_ID, PASSWORD_ID) 
+                    VALUES (DEFAULT, display_name, email_id, role_id, phone_number, address, county, DEFAULT, null, DEFAULT, account_status_id ,DEFAULT) ;
+                dbms_output.put_line('Row inserted into Account table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Account Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_account_table;
             
+            PROCEDURE insert_account_role_mapping_table(account_id  IN account_role_mapping_history.account_id%TYPE,
+                                            role_id  IN account_role_mapping_history.role_id%TYPE,
+                                            created_by_id  IN account_role_mapping_history.created_by_id%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into account_role_mapping_history (MAPPING_ID, ACCOUNT_ID, ROLE_ID, CREATED_ON, created_by_id) 
+                        VALUES (DEFAULT, account_id , role_id, DEFAULT , null) ;
+                dbms_output.put_line('Row inserted into Account role mapping history table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Account role mapping history Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_account_role_mapping_table;
+            
+           
             
     end INSERTION;
 /
