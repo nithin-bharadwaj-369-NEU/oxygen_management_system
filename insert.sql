@@ -13,6 +13,8 @@ AS
     PROCEDURE insert_oxygen_plant_details(name in oxygen_cylinder_plant.name%TYPE,
         address in oxygen_cylinder_plant.address%TYPE, phone_number in oxygen_cylinder_plant.phone_number%TYPE,
         county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE);
+    PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
+                            quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE);
 END INSERTION;
 /
 
@@ -62,6 +64,27 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                dbms_output.put_line(dbms_utility.format_error_stack);
                dbms_output.put_line('---------------------------------------------------');
         end insert_oxygen_plant_details;
+
+        PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
+                            quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into oxygen_cylinder_details(CYLINDER_ID, PLANT_ID, quantity, available_status,  
+                                        CREATED_ON, UPDATED_ON) VALUES (DEFAULT, plant_id, quantity, available_status, DEFAULT, DEFAULT) ;
+                dbms_output.put_line('Row inserted into oxygen cylinder details table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into OXygen Cylidner details Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_oxygen_cylinder_details;
     
     end INSERTION;
 /
