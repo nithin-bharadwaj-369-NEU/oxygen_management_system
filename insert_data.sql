@@ -125,4 +125,6 @@ execute insertion.insert_authentication_config('192.168.43.210', 'America/New_Yo
 execute insertion.insert_renter_payment_checkout(4, 1, 'Oxygen cylinder asap', 20, 80);
 
 
+-------------------------------------------------------------- Orders Table Insertion --------------------------------------------------------
 
+execute insertion.insert_orders();

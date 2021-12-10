@@ -53,6 +53,16 @@ AS
                                                 details_data IN  renter_payment_checkout.details%TYPE,
                                                 payment_made_data IN  renter_payment_checkout.payment_made%TYPE,
                                                 payment_due  IN renter_payment_checkout.payment_due%TYPE);
+    PROCEDURE insert_order(acc_id IN orders.account_id%TYPE,
+                                            rental_price_id IN orders.rental_price_id%TYPE,  
+                                            transaction_process_id IN orders.transaction_id%TYPE,
+                                            pay_status_code IN orders.payment_status_code%TYPE,
+                                            cylinder_id  IN  orders.cylinder_id%TYPE,
+                                            plant_id  IN orders.plant_id%TYPE,
+                                            covid_report_id IN orders.covid_report_id%TYPE,
+                                            booked_date_d  IN orders.booked_date%TYPE,
+                                            booking_end_date_d IN orders.booking_end_date%TYPE);
+                                            
 END INSERTION;
 /
 
@@ -398,6 +408,35 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line('---------------------------------------------------');
             end insert_renter_payment_checkout;
            
+            PROCEDURE insert_order(acc_id IN orders.account_id%TYPE,
+                                            rental_price_id IN orders.rental_price_id%TYPE,  
+                                            transaction_process_id IN orders.transaction_id%TYPE,
+                                            pay_status_code IN orders.payment_status_code%TYPE,
+                                            cylinder_id  IN  orders.cylinder_id%TYPE,
+                                            plant_id  IN orders.plant_id%TYPE,
+                                            covid_report_id IN orders.covid_report_id%TYPE,
+                                            booked_date_d  IN orders.booked_date%TYPE,
+                                            booking_end_date_d IN orders.booking_end_date%TYPE)
+            IS 
+            BEGIN
+                dbms_output.put_line('---------------------------------------------------');
+                insert into orders(order_id, account_id, rental_price_id, transaction_id, payment_status_code, cylinder_id, plant_id , covid_report_id,
+                                    booked_date, booking_end_date ) 
+                        VALUES (DEFAULT, acc_id, rental_price_id, transaction_process_id, pay_status_code, cylinder_id, plant_id, covid_report_id,
+                                    booked_date_d, booking_end_date_d ) ;
+                dbms_output.put_line('Row inserted into Orders table');
+                dbms_output.put_line('---------------------------------------------------');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into Orders Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end insert_order;
             
     end INSERTION;
 /
