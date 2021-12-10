@@ -1,4 +1,4 @@
---Defined steps before creating Packages 
+--Defined steps before creating Packages
 
 --1) Create Package Specs
 --2) Create Package Body.
@@ -7,8 +7,8 @@ DROP PACKAGE INSERTION;
 
 CREATE OR REPLACE PACKAGE INSERTION
 AS
-   PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE, 
-        display_name in role.display_name%TYPE, 
+   PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE,
+        display_name in role.display_name%TYPE,
         CREATED_BY_ID in role.created_by_id%TYPE);
     PROCEDURE insert_oxygen_plant_details(name in oxygen_cylinder_plant.name%TYPE,
         address in oxygen_cylinder_plant.address%TYPE, phone_number in oxygen_cylinder_plant.phone_number%TYPE,
@@ -32,12 +32,13 @@ END INSERTION;
 
 -- https://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_crypto.htm#:~:text=The%20following%20listing%20shows%20PL/SQL%20block%20encrypting%20and%20decrypting%20pre%2Ddefined%20%27input_string%27%20using%20256%2Dbit%20AES%20algorithm%20with%20Cipher%20Block%20Chaining%20and%20PKCS%235%20compliant%20padding.
 
+
 CREATE OR REPLACE PACKAGE BODY INSERTION
     AS
-        PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE, 
-        display_name in role.display_name%TYPE, 
+        PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE,
+        display_name in role.display_name%TYPE,
         CREATED_BY_ID in role.created_by_id%TYPE)
-        IS 
+        IS
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
             insert into ROLE(ROLE_ID, ROLE_DESCRIPTION, DISPLAY_NAME,
@@ -55,14 +56,14 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                dbms_output.put_line(dbms_utility.format_error_stack);
                dbms_output.put_line('---------------------------------------------------');
         end INSERT_ROLE;
-        
+
         PROCEDURE insert_oxygen_plant_details(name in oxygen_cylinder_plant.name%TYPE,
         address in oxygen_cylinder_plant.address%TYPE, phone_number in oxygen_cylinder_plant.phone_number%TYPE,
         county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE)
-        IS 
+        IS
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
-            insert into oxygen_cylinder_plant(PLANT_ID, NAME, ADDRESS, PHONE_NUMBER, COUNTY, EMAIL_ID, 
+            insert into oxygen_cylinder_plant(PLANT_ID, NAME, ADDRESS, PHONE_NUMBER, COUNTY, EMAIL_ID,
                                     CREATED_ON, UPDATED_ON) VALUES (DEFAULT, name, address, phone_number, county, email_id, DEFAULT, DEFAULT) ;
             dbms_output.put_line('Row inserted into oxygen cylinder plant table');
             dbms_output.put_line('---------------------------------------------------');
@@ -80,10 +81,10 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
 
         PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into oxygen_cylinder_details(CYLINDER_ID, PLANT_ID, quantity, available_status,  
+                insert into oxygen_cylinder_details(CYLINDER_ID, PLANT_ID, quantity, available_status,
                                         CREATED_ON, UPDATED_ON) VALUES (DEFAULT, plant_id, quantity, available_status, DEFAULT, DEFAULT) ;
                 dbms_output.put_line('Row inserted into oxygen cylinder details table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -98,12 +99,12 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_oxygen_cylinder_details;
-    
+
         PROCEDURE insert_payment_status(status_description IN payment_status.status_description%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into payment_status(PAYMENT_STATUS_CODE, status_description, created_on) 
+                insert into payment_status(PAYMENT_STATUS_CODE, status_description, created_on)
                         VALUES (DEFAULT, status_description , DEFAULT) ;
                 dbms_output.put_line('Row inserted into Payment status table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -118,14 +119,14 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_payment_status;
-    
+
         PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
                             name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
                             covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into patient_details(covid_report_id, name, address, covid_status, county) 
+                insert into patient_details(covid_report_id, name, address, covid_status, county)
                         VALUES (covid_report_id, name, address, covid_status, county) ;
                 dbms_output.put_line('Row inserted into Patient Details table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -140,13 +141,13 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_patient_details;
-    
+
         PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
                                                 price IN rental_price.price%TYPE)
-                IS 
+                IS
                 BEGIN
                     dbms_output.put_line('---------------------------------------------------');
-                    insert into rental_price(price_id, created_on, price) 
+                    insert into rental_price(price_id, created_on, price)
                             VALUES (DEFAULT, created_on, price) ;
                     dbms_output.put_line('Row inserted into Rental price table');
                     dbms_output.put_line('---------------------------------------------------');
@@ -161,13 +162,13 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                        dbms_output.put_line(dbms_utility.format_error_stack);
                        dbms_output.put_line('---------------------------------------------------');
                 end insert_rental_price;
-        
-        
+
+
          PROCEDURE insert_account_status(status_description IN account_status.status_description%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into account_status(STATUS_ID, status_description, created_on, updated_on) 
+                insert into account_status(STATUS_ID, status_description, created_on, updated_on)
                         VALUES (DEFAULT, status_description , DEFAULT, DEFAULT) ;
                 dbms_output.put_line('Row inserted into Account status table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -253,6 +254,4 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
             
     end INSERTION;
 /
-
-
 
