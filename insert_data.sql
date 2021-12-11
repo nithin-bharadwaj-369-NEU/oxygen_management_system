@@ -167,7 +167,7 @@ execute insertion.insert_account_table('Gaurav', 'Gaurav.reddy@gmail.com', 98667
 execute insertion.insert_account_table('Nitya', 'nitya.reddy@gmail.com', 8755647893, '107 Park Street', 'Norflok', 3, null, 1, 12);
 execute insertion.insert_account_table('Daniel', 'Dan.hose@gmail.com', 9008787645, '89 J Vue', 'Sufklok', 3, null, 1, 13);
 execute insertion.insert_account_table('Keval', 'keval.shah@gmail.com', 9833425678, ' Mission Main', 'Worcester', 3, null, 1, 14);
-execute insertion.insert_account_table('Ramesh', 'Ramesh.asd@gmail.com', 9898123456, '109 Copley', 'Franklin', 3, null, 1, 15);
+execute insertion.insert_account_table('Ramesh', 'Ramesh.asd@gmail.com', 9898123456, '109 Copley', 'Sufflok', 3, null, 1, 15);
 execute insertion.insert_account_table('Suresh', 'Suresh.reddy@gmail.com', 7564890034, 'Prudential St', 'Sufflok', 3, null, 1, 16);
 execute insertion.insert_account_table('Lucy', 'Lucy.rajesh@gmail.com', 8763553678, '13 J Vue', 'Frankin', 2, null, 1, 17);
 
