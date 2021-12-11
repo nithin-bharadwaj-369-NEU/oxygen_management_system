@@ -14,3 +14,8 @@ JOIN OXYGEN_CYLINDER_PLANT p
 ON d.plant_id = p.plant_id
 WHERE AVAILABLE_STATUS = 1
 GROUP BY p.name;
+
+---Number of patients in a county 
+
+SELECT county, 'countywise patinet count',COUNT(county)
+FROM patient_details GROUP BY county;
