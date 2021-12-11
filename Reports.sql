@@ -19,3 +19,15 @@ GROUP BY p.name;
 
 SELECT county, 'countywise patinet count',COUNT(county)
 FROM patient_details GROUP BY county;
+
+--Which county has more orders
+
+select a.county,count(1) from orders o join account a 
+on o.account_id = a.account_id
+group by a.county;
+
+--Status of Orders which are complete and Incomplete
+
+select ps.status_description,count(1) from orders o join payment_status ps
+on o.payment_status_code = ps.payment_status_code
+group by ps.status_description;
