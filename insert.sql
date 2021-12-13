@@ -3,6 +3,7 @@
 --1) Create Package Specs
 --2) Create Package Body.
 
+
 DROP PACKAGE INSERTION;
 
 CREATE OR REPLACE PACKAGE INSERTION
@@ -22,14 +23,16 @@ AS
     PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
                                                 price IN rental_price.price%TYPE);
     PROCEDURE insert_account_status(status_description IN account_status.status_description%TYPE);
-    PROCEDURE insert_password(acc_password IN password.password_hash%TYPE, 
-                                                password_salted IN password.password_salted%TYPE,
-                                                password_question IN password.password_question%TYPE
+    PROCEDURE insert_password(acc_password IN VARCHAR2,
+                                                password_question IN password.password_question%TYPE,
+                                                password_answer_hash IN VARCHAR2
                                                 );
+    FUNCTION encrypt_password(cp_string in varchar2) RETURN RAW;
+    FUNCTION string_salted(cp_string in varchar2) RETURN varchar2;
     PROCEDURE insert_payment_method(description IN payment_method.description %TYPE);
     PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
                                             type IN permissions.type%TYPE, description  IN permissions.description%TYPE);
-    PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE, 
+    PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE,
                                             email_id  IN Account.email_id%TYPE,
                                             phone_number IN Account.phone_number%TYPE,
                                             address  IN Account.address%TYPE,
@@ -41,20 +44,20 @@ AS
     PROCEDURE insert_account_role_mapping_table(account_id  IN account_role_mapping_history.account_id%TYPE,
                                             role_id  IN account_role_mapping_history.role_id%TYPE,
                                             created_by_id  IN account_role_mapping_history.created_by_id%TYPE);
-   
+
     PROCEDURE insert_authentication_config(ip_address_value IN authentication_config.ip_address%TYPE,
                                                 timezone_value IN authentication_config.time_zone_data%TYPE,
                                                 logout IN authentication_config.is_logout%TYPE,
                                                 logout_time IN authentication_config.logout_time%TYPE,
                                                 account_id IN authentication_config.account_id%TYPE);
-    
+
     PROCEDURE insert_renter_payment_checkout(payment_id IN renter_payment_checkout.payment_method_id%TYPE,
                                                 acc_id IN renter_payment_checkout.account_id%TYPE,
                                                 details_data IN  renter_payment_checkout.details%TYPE,
                                                 payment_made_data IN  renter_payment_checkout.payment_made%TYPE,
                                                 payment_due  IN renter_payment_checkout.payment_due%TYPE);
     PROCEDURE insert_order(acc_id IN orders.account_id%TYPE,
-                                            rental_price_id IN orders.rental_price_id%TYPE,  
+                                            rental_price_id IN orders.rental_price_id%TYPE,
                                             transaction_process_id IN orders.transaction_id%TYPE,
                                             pay_status_code IN orders.payment_status_code%TYPE,
                                             cylinder_id  IN  orders.cylinder_id%TYPE,
@@ -62,7 +65,7 @@ AS
                                             covid_report_id IN orders.covid_report_id%TYPE,
                                             booked_date_d  IN orders.booked_date%TYPE,
                                             booking_end_date_d IN orders.booking_end_date%TYPE);
-                                            
+
 END INSERTION;
 /
 
@@ -114,6 +117,29 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                dbms_output.put_line(dbms_utility.format_error_stack);
                dbms_output.put_line('---------------------------------------------------');
         end insert_oxygen_plant_details;
+        
+         FUNCTION encrypt_password(cp_string in varchar2) 
+            RETURN RAW IS 
+               enc_string RAW (2000); 
+            BEGIN 
+               select 
+             DBMS_CRYPTO.encrypt(utl_raw.cast_to_raw(cp_string), 4353 /* = dbms_crypto.DES_CBC_PKCS5 */, 'A1A2A3A4A5A6CAFE') 
+             into enc_string from dual;
+                DBMS_OUTPUT.PUT_LINE ('Encrypted string: ' || enc_string);
+               RETURN enc_string; 
+            END; 
+            
+        
+            FUNCTION string_salted(cp_string in varchar2) 
+            RETURN varchar2 IS 
+               salt_string varchar2(2000);
+               
+            BEGIN 
+               select  concat(cp_string, 'asd213')  into salt_string from dual;
+                DBMS_OUTPUT.PUT_LINE ('Salted string: ' || salt_string);
+               RETURN salt_string; 
+            END; 
+            
 
         PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE)
@@ -219,40 +245,25 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_account_status;
-           
-            PROCEDURE insert_password(acc_password IN password.password_hash%TYPE, 
-                                                password_salted IN password.password_salted%TYPE,
-                                                password_question IN password.password_question%TYPE
-                                                )
-            IS 
---                encrypted_password_hash_raw      RAW (2000);
---                encrypted_password_answer_hash_raw      RAW (2000);
---                num_key_bytes      NUMBER := 256/8;        -- key length 256 bits (32 bytes)
---                key_bytes_raw      RAW (32);               -- stores 256-bit encryption key
---                encryption_type    PLS_INTEGER :=          -- total encryption type
---                            DBMS_CRYPTO.ENCRYPT_AES256
---                          + DBMS_CRYPTO.CHAIN_CBC
---                          + DBMS_CRYPTO.PAD_PKCS5;
 
+            PROCEDURE insert_password(acc_password IN VARCHAR2,
+                                                password_question IN password.password_question%TYPE,
+                                                password_answer_hash IN VARCHAR2
+                                                )
+            IS
+                enc_string_password RAW (2000);
+                 enc_string_answer RAW (2000); 
+                 salted_password varchar2(1000);
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
                    DBMS_OUTPUT.PUT_LINE ( 'Original string: ' || acc_password);
+                   select encrypt_password(acc_password) into enc_string_password from dual;
+                   select encrypt_password(password_answer_hash) into enc_string_answer from dual;
+                   select string_salted(acc_password) into salted_password from dual;
 
---                   encrypted_password_hash_raw := DBMS_CRYPTO.ENCRYPT
---                          (
---                             src => UTL_I18N.STRING_TO_RAW (acc_password,  'AL32UTF8'),
---                             typ => encryption_type,
---                             key => key_bytes_raw
---                          );
---                 encrypted_password_answer_hash_raw := DBMS_CRYPTO.ENCRYPT
---                          (
---                             src => UTL_I18N.STRING_TO_RAW (password_answer_hash,  'AL32UTF8'),
---                             typ => encryption_type,
---                             key => key_bytes_raw
---                          );
-                insert into password(PASSWORD_ID, PASSWORD_HASH, PASSWORD_SALTED, PASSWORD_QUESTION, 
-                                        created_date, updated_date) 
-                        VALUES (DEFAULT, acc_password,  password_salted, PASSWORD_QUESTION, DEFAULT , DEFAULT) ;
+                insert into password(PASSWORD_ID, PASSWORD_HASH, PASSWORD_SALTED, PASSWORD_QUESTION, passsword_answer_hash,
+                                        created_date, updated_date)
+                        VALUES (DEFAULT, enc_string_password,  salted_password, PASSWORD_QUESTION, enc_string_answer, DEFAULT , DEFAULT) ;
                 dbms_output.put_line('Row inserted into Password table');
                 dbms_output.put_line('---------------------------------------------------');
             commit;
@@ -266,13 +277,13 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_password;
-            
-            
+
+
            PROCEDURE insert_payment_method(description IN payment_method.description%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into payment_method(PAYMENT_METHOD_ID, description, created_on, updated_on) 
+                insert into payment_method(PAYMENT_METHOD_ID, description, created_on, updated_on)
                         VALUES (DEFAULT, description , DEFAULT, DEFAULT) ;
                 dbms_output.put_line('Row inserted into Payment Method table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -287,13 +298,13 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_payment_method;
-            
+
             PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
                                             type IN permissions.type%TYPE, description  IN permissions.description%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into permissions(PERMISSION_ID, ROLE_ID, TYPE, DESCRIPTION, created_on) 
+                insert into permissions(PERMISSION_ID, ROLE_ID, TYPE, DESCRIPTION, created_on)
                         VALUES (DEFAULT, role_id , type, description , DEFAULT) ;
                 dbms_output.put_line('Row inserted into Permissions table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -308,8 +319,8 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_permissions_method;
-            
-            PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE, 
+
+            PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE,
                                             email_id  IN Account.email_id%TYPE,
                                             phone_number IN Account.phone_number%TYPE,
                                             address  IN Account.address%TYPE,
@@ -318,11 +329,11 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                             modified_by_id IN ACCOUNT.modified_by_id%TYPE,
                                             account_status_id  IN ACCOUNT.account_status_id%TYPE,
                                             password_id IN ACCOUNT.password_id%TYPE )
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
                 insert into account(ACCOUNT_ID, DISPLAY_NAME, EMAIL_ID,  ROLE_ID, PHONE_NUMBER, ADDRESS, COUNTY, created_on ,
-                 MODIFIED_BY_ID, MODIFIED_ON , ACCOUNT_STATUS_ID, PASSWORD_ID) 
+                 MODIFIED_BY_ID, MODIFIED_ON , ACCOUNT_STATUS_ID, PASSWORD_ID)
                     VALUES (DEFAULT, display_name, email_id, role_id, phone_number, address, county, DEFAULT, null, DEFAULT, account_status_id ,DEFAULT) ;
                 dbms_output.put_line('Row inserted into Account table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -337,14 +348,14 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_account_table;
-            
+
             PROCEDURE insert_account_role_mapping_table(account_id  IN account_role_mapping_history.account_id%TYPE,
                                             role_id  IN account_role_mapping_history.role_id%TYPE,
                                             created_by_id  IN account_role_mapping_history.created_by_id%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into account_role_mapping_history (MAPPING_ID, ACCOUNT_ID, ROLE_ID, CREATED_ON, created_by_id) 
+                insert into account_role_mapping_history (MAPPING_ID, ACCOUNT_ID, ROLE_ID, CREATED_ON, created_by_id)
                         VALUES (DEFAULT, account_id , role_id, DEFAULT , null) ;
                 dbms_output.put_line('Row inserted into Account role mapping history table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -359,16 +370,16 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_account_role_mapping_table;
-            
+
            PROCEDURE insert_authentication_config(ip_address_value IN authentication_config.ip_address%TYPE,
                                                 timezone_value IN authentication_config.time_zone_data%TYPE,
                                                 logout IN authentication_config.is_logout%TYPE,
                                                 logout_time IN authentication_config.logout_time%TYPE,
                                                 account_id IN authentication_config.account_id%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into authentication_config(SESSION_ID, LOGIN_TIME, IP_ADDRESS, TIME_ZONE_DATA, IS_LOGOUT, LOGOUT_TIME , ACCOUNT_ID) 
+                insert into authentication_config(SESSION_ID, LOGIN_TIME, IP_ADDRESS, TIME_ZONE_DATA, IS_LOGOUT, LOGOUT_TIME , ACCOUNT_ID)
                         VALUES (DEFAULT, DEFAULT, ip_address_value, timezone_value, logout,  null, account_id) ;
                 dbms_output.put_line('Row inserted into authentication_config table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -383,16 +394,16 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_authentication_config;
-           
+
            PROCEDURE insert_renter_payment_checkout(payment_id IN renter_payment_checkout.payment_method_id%TYPE,
                                                 acc_id IN renter_payment_checkout.account_id%TYPE,
                                                 details_data IN  renter_payment_checkout.details%TYPE,
                                                 payment_made_data IN  renter_payment_checkout.payment_made%TYPE,
                                                 payment_due  IN renter_payment_checkout.payment_due%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
-                insert into renter_payment_checkout(transaction_id, payment_method_id, account_id, details, payment_made, payment_due) 
+                insert into renter_payment_checkout(transaction_id, payment_method_id, account_id, details, payment_made, payment_due)
                         VALUES (DEFAULT, payment_id, acc_id, details_data, payment_made_data,  payment_due) ;
                 dbms_output.put_line('Row inserted into Renter Payment Checkout table');
                 dbms_output.put_line('---------------------------------------------------');
@@ -407,9 +418,9 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_renter_payment_checkout;
-           
+
             PROCEDURE insert_order(acc_id IN orders.account_id%TYPE,
-                                            rental_price_id IN orders.rental_price_id%TYPE,  
+                                            rental_price_id IN orders.rental_price_id%TYPE,
                                             transaction_process_id IN orders.transaction_id%TYPE,
                                             pay_status_code IN orders.payment_status_code%TYPE,
                                             cylinder_id  IN  orders.cylinder_id%TYPE,
@@ -417,11 +428,11 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                             covid_report_id IN orders.covid_report_id%TYPE,
                                             booked_date_d  IN orders.booked_date%TYPE,
                                             booking_end_date_d IN orders.booking_end_date%TYPE)
-            IS 
+            IS
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
                 insert into orders(order_id, account_id, rental_price_id, transaction_id, payment_status_code, cylinder_id, plant_id , covid_report_id,
-                                    booked_date, booking_end_date ) 
+                                    booked_date, booking_end_date )
                         VALUES (DEFAULT, acc_id, rental_price_id, transaction_process_id, pay_status_code, cylinder_id, plant_id, covid_report_id,
                                     booked_date_d, booking_end_date_d ) ;
                 dbms_output.put_line('Row inserted into Orders table');
@@ -437,7 +448,6 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_order;
-            
+
     end INSERTION;
 /
-

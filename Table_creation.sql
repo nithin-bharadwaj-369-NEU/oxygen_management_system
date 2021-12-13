@@ -284,10 +284,10 @@ IS
 BEGIN
     table_name:= 'CREATE TABLE password (
                                   password_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
-                                  password_hash VARCHAR2(500),
+                                  password_hash RAW(2000),
                                   password_salted VARCHAR2(500),
                                   password_question VARCHAR2(500),
-                                  passsword_answer_hash VARCHAR2(500),
+                                  passsword_answer_hash RAW(2000),
                                   created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                   updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                   PRIMARY KEY (password_id))' ;

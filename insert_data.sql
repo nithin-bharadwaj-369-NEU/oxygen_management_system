@@ -90,7 +90,7 @@ execute insertion.insert_payment_method('Paypal');
 
 ------------------------------------------------------------ Password Method Table insertion----------------------------------------------------------
 
-execute insertion.insert_password('dmdddmdd', 'dmdddmdd2133', 'when is birthday');
+execute insertion.insert_password('dmdddmdd' ,  'when is birthday', 'dmdddmdd2133');
 
 
 
