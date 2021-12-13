@@ -124,7 +124,23 @@ execute insertion.insert_payment_method('Paypal');
 ------------------------------------------------------------ Password Method Table insertion----------------------------------------------------------
 
 execute insertion.insert_password('dmdddmdd' ,  'when is birthday', 'dmdddmdd2133');
-
+execute insertion.insert_password('dmdddmdd', 'when is birthday', 'dmdddmdd2133',);
+execute insertion.insert_password('dmddabc', 'favourite pet', 'dmdddmdd2131');
+execute insertion.insert_password('dmdddefg', 'best friend name', 'dmdddmdd2132');
+execute insertion.insert_password('dmdddhij', 'when is birthday', 'dmdddmdd2134');
+execute insertion.insert_password('dmdddklmn', 'when is birthday', 'dmdddmdd2187');
+execute insertion.insert_password('dmdddmdop', 'favourite pet', 'dmdddmdd2198');
+execute insertion.insert_password('dmdddmqr', 'when is birthday', 'dmdddmdd2133');
+execute insertion.insert_password('dmddabcdde', 'favourite pet', 'dmdddmdd21');
+execute insertion.insert_password('dmdddefgh', 'best friend name', 'dmdddmdd2137');
+execute insertion.insert_password('dmdddhijk', 'when is birthday', 'dmdddmdd2197');
+execute insertion.insert_password('dmdddkhy', 'best friend name', 'dmdddmd123');
+execute insertion.insert_password('dmdddshy', 'favourite pet', 'dmdddmdd21');
+execute insertion.insert_password('dmdddeee', 'when is birthday', 'dmdddmd673');
+execute insertion.insert_password('dmddorg', 'when is birthday', 'dmdddmdd2678');
+execute insertion.insert_password('dmdduri', 'when is birthday', 'dmdddmdd1009');
+execute insertion.insert_password('dmddopt', 'when is birthday', 'dmdddmdd176');
+execute insertion.insert_password('dmddllike', 'when is birthday', 'dmdddmdd888');
 
 
 ------------------------------------------------------------ Permissions Table insertion----------------------------------------------------------
