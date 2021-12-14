@@ -220,7 +220,23 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
         PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE)
             IS
+                invalid_data_entered EXCEPTION;
+                PRAGMA exception_init( invalid_data_entered, -20009);
+                
             BEGIN
+                IF (available_status = 0 or available_status = 1 ) THEN
+                    dbms_output.put_line('Entered valid available status');
+                ELSE
+                        raise_application_error(-20009, 'Invalid Available status is entered');
+                END IF;
+                
+                IF (quantity < 100 or quantity > 2000 ) THEN
+                    dbms_output.put_line('Entered Invalid oxygen cylinder quantity');
+                    raise_application_error(-20009, 'Invalid Quantity status is entered');
+                ELSE
+                    dbms_output.put_line('Entered Valid oxygen cylinder quantity');
+                END IF;
+                
                 dbms_output.put_line('---------------------------------------------------');
                 insert into oxygen_cylinder_details(CYLINDER_ID, PLANT_ID, quantity, available_status,
                                         CREATED_ON, UPDATED_ON) VALUES (DEFAULT, plant_id, quantity, available_status, DEFAULT, DEFAULT) ;
