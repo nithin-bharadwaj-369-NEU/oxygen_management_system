@@ -92,7 +92,7 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
             dbms_output.put_line('---------------------------------------------------');
             -- Checking if number is present in role description and display name
             select REGEXP_INSTR(role_description, '[[:digit:]/@&#$%*(]') into check_if_number_role_desc from dual;
-            select REGEXP_INSTR(display_name, '[[:digit:]]') into check_if_number_display_name from dual;
+            select REGEXP_INSTR(display_name, '[[:digit:]/@&#$%*(]') into check_if_number_display_name from dual;
             IF (check_if_number_role_desc > 0 ) THEN
                     dbms_output.put_line('Role description has numbers. Please remove them');
                     raise_application_error(-20004,'Invalid Description Entered');
@@ -154,8 +154,8 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
             select validate_email(email_id) into validate_email_data from dual;
-            select REGEXP_INSTR(name, '[[:digit:]]') into validate_plant_name from dual;
-            select REGEXP_INSTR(county, '[[:digit:]]') into validate_county from dual;
+            select REGEXP_INSTR(name, '[[:digit:]/@&#$%*(]') into validate_plant_name from dual;
+            select REGEXP_INSTR(county, '[[:digit:]/@&#$%*(]') into validate_county from dual;
             
             IF (validate_plant_name > 0 ) THEN
                     dbms_output.put_line('Plant  name has numbers. Please remove them');
@@ -260,7 +260,7 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                 description_invalid EXCEPTION;
                 PRAGMA exception_init( description_invalid, -20010 ); --User defined exception  ORA-20000 through ORA-20999
             BEGIN
-                    select REGEXP_INSTR(status_description, '[[:digit:]]') into check_status_description from dual;
+                    select REGEXP_INSTR(status_description, '[[:digit:]/@&#$%*(]') into check_status_description from dual;
                     IF (check_status_description > 0 ) THEN
                         dbms_output.put_line('Payment description has numbers. Please remove them');
                         raise_application_error(-20010,'Invalid Description Entered');
@@ -289,9 +289,40 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                             name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
                             covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE)
             IS
-                
+                description_invalid EXCEPTION;
+                PRAGMA exception_init( description_invalid, -20011 ); --User defined exception  ORA-20000 through ORA-20999
+                invalid_covid_status_entered EXCEPTION;
+                PRAGMA exception_init( invalid_covid_status_entered, -20012);
+
+                check_name_validation NUMBER;
+                check_county_validation NUMBER;
+
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
+                -- Checking if number is present in role description and display name
+                select REGEXP_INSTR(name, '[[:digit:]/@&#$%*(]') into check_name_validation from dual;
+                select REGEXP_INSTR(county, '[[:digit:]]') into check_county_validation from dual;
+                
+                IF (check_name_validation > 0 ) THEN
+                    dbms_output.put_line('Patient Name has numbers. Please remove them');
+                    raise_application_error(-20011,'Invalid Patient Name Entered');
+                ELSE
+                    dbms_output.put_line('Entered valid Patient Name');
+                END IF;
+            
+                IF (check_county_validation > 0 ) THEN
+                        dbms_output.put_line('County has numbers. Please remove them');
+                    raise_application_error(-20011,'Invalid County name Entered');
+                ELSE
+                    dbms_output.put_line('Entered valid County name');
+                END IF;
+                
+                IF (covid_status = 0 or covid_status = 1 ) THEN
+                    dbms_output.put_line('Entered valid covid status');
+                ELSE
+                        raise_application_error(-20012, 'Invalid Covid status is entered');
+                END IF;
+                
                 insert into patient_details(covid_report_id, name, address, covid_status, county)
                         VALUES (covid_report_id, name, address, covid_status, county) ;
                 dbms_output.put_line('Row inserted into Patient Details table');
