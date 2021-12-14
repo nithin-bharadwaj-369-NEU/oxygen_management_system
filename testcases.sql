@@ -36,3 +36,8 @@ execute insertion.insert_rental_price(TIMESTAMP '9-12-21 09:26:50.12', 3);
 --------------------------------------------------------- Account status Table INSERTION ---------------------------------------------------------
 
 execute insertion.insert_account_status('Active123');
+
+
+--------------------------------------------------------- Payment  MethodTable INSERTION ---------------------------------------------------------
+
+execute insertion.insert_payment_method('Credit Card123123');

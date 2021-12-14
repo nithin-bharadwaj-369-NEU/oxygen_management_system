@@ -382,7 +382,7 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                 select REGEXP_INSTR(status_description, '[[:digit:]/@&#$%*(]') into check_desc from dual;
                     IF (check_desc > 0 ) THEN
                         dbms_output.put_line('Account status description has numbers. Please remove them');
-                        raise_application_error(-20004,'Invalid Description Entered');
+                        raise_application_error(-20014,'Invalid Description Entered');
                     ELSE
                         dbms_output.put_line('Entered valid description');
                     END IF;
@@ -438,8 +438,20 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
 
            PROCEDURE insert_payment_method(description IN payment_method.description%TYPE)
             IS
+                check_desc NUMBER;
+                description_invalid EXCEPTION;
+                PRAGMA exception_init( description_invalid, -20015 ); --User defined exception  ORA-20000 through ORA-20999
+
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
+                select REGEXP_INSTR(description, '[[:digit:]/@&#$%*(]') into check_desc from dual;
+                IF (check_desc > 0 ) THEN
+                    dbms_output.put_line('Payment description has numbers. Please remove them');
+                    raise_application_error(-20015,'Invalid Payment Description Entered');
+                ELSE
+                    dbms_output.put_line('Entered valid Payment description');
+                END IF;
+
                 insert into payment_method(PAYMENT_METHOD_ID, description, created_on, updated_on)
                         VALUES (DEFAULT, description , DEFAULT, DEFAULT) ;
                 dbms_output.put_line('Row inserted into Payment Method table');
