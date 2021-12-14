@@ -342,8 +342,18 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
         PROCEDURE insert_rental_price(created_on IN rental_price.created_on%TYPE,
                                                 price IN rental_price.price%TYPE)
                 IS
+                    invalid_data_entered EXCEPTION;
+                    PRAGMA exception_init( invalid_data_entered, -20013);
+
                 BEGIN
                     dbms_output.put_line('---------------------------------------------------');
+                            IF (price < 10 or price > 10000 ) THEN
+                                dbms_output.put_line('Entered Invalid oxygen cylinder price');
+                                raise_application_error(-20013, 'Invalid Quantity price is entered');
+                            ELSE
+                                dbms_output.put_line('Entered Valid oxygen cylinder price');
+                            END IF;
+
                     insert into rental_price(price_id, created_on, price)
                             VALUES (DEFAULT, created_on, price) ;
                     dbms_output.put_line('Row inserted into Rental price table');
@@ -363,8 +373,20 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
 
          PROCEDURE insert_account_status(status_description IN account_status.status_description%TYPE)
             IS
+                check_desc NUMBER;
+                description_invalid EXCEPTION;
+                PRAGMA exception_init( description_invalid, -20014 ); --User defined exception  ORA-20000 through ORA-20999
+
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
+                select REGEXP_INSTR(status_description, '[[:digit:]/@&#$%*(]') into check_desc from dual;
+                    IF (check_desc > 0 ) THEN
+                        dbms_output.put_line('Account status description has numbers. Please remove them');
+                        raise_application_error(-20004,'Invalid Description Entered');
+                    ELSE
+                        dbms_output.put_line('Entered valid description');
+                    END IF;
+                    
                 insert into account_status(STATUS_ID, status_description, created_on, updated_on)
                         VALUES (DEFAULT, status_description , DEFAULT, DEFAULT) ;
                 dbms_output.put_line('Row inserted into Account status table');

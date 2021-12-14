@@ -26,3 +26,13 @@ execute insertion.insert_patient_details(34567890, 'Rafi', '567, Park street', 1
 execute insertion.insert_patient_details(12367890, 'Rasd123avi', '27, North Station street', 12, 'Suffolk');
 execute insertion.insert_patient_details(12367890, 'Rasd123avi', '27, North Station street', 0, 'Suffolk');
 
+--------------------------------------------------------- Rental Price Table INSERTION ---------------------------------------------------------
+-- TIMESTAMP format - 'DD-MM-YY HH:MM:SS.FF'
+
+execute insertion.insert_rental_price(TIMESTAMP '10-12-21 09:26:50.12', 100000);
+execute insertion.insert_rental_price(TIMESTAMP '9-12-21 09:26:50.12', 3);
+
+
+--------------------------------------------------------- Account status Table INSERTION ---------------------------------------------------------
+
+execute insertion.insert_account_status('Active123');
