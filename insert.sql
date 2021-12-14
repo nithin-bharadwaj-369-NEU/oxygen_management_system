@@ -78,8 +78,41 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
         display_name in role.display_name%TYPE,
         CREATED_BY_ID in role.created_by_id%TYPE)
         IS
+            check_if_number_role_desc NUMBER;
+            check_if_number_display_name NUMBER;
+            description_invalid EXCEPTION;
+            PRAGMA exception_init( description_invalid, -20004 ); --User defined exception  ORA-20000 through ORA-20999
+            display_name_invalid EXCEPTION;
+            PRAGMA exception_init( display_name_invalid, -20005 );
+            role_invalid EXCEPTION;
+            PRAGMA exception_init( role_invalid, -20006 );
+            
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
+            -- Checking if number is present in role description and display name
+            select REGEXP_INSTR(role_description, '[[:digit:]]') into check_if_number_role_desc from dual;
+            select REGEXP_INSTR(display_name, '[[:digit:]]') into check_if_number_display_name from dual;
+            IF (check_if_number_role_desc > 0 ) THEN
+                    dbms_output.put_line('Role description has numbers. Please remove them');
+                    raise_application_error(-20004,'Invalid Description Entered');
+                ELSE
+                    dbms_output.put_line('Entered valid Role description');
+                END IF;
+            
+            IF (check_if_number_display_name > 0 ) THEN
+                    dbms_output.put_line('Role description has numbers. Please remove them');
+                    raise_application_error(-20005,'Invalid DIsplay name Entered');
+                ELSE
+                    dbms_output.put_line('Entered valid Display name');
+                END IF;
+                
+            -- Checking if role entered is in Customer, Admin and OxygenPlant
+            IF (role_description ='Customer' or  role_description ='Oxygen Supplier' or role_description ='Admin') THEN
+                    dbms_output.put_line('Entered valid Role');
+                ELSE
+                    raise_application_error(-20006,'Invalid Role Entered');
+                END IF;
+                
             insert into ROLE(ROLE_ID, ROLE_DESCRIPTION, DISPLAY_NAME,
                                     CREATED_BY_ID,CREATED_ON) VALUES (DEFAULT, role_description, display_name, created_by_id, DEFAULT) ;
             dbms_output.put_line('Row inserted into role table');
