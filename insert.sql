@@ -29,6 +29,7 @@ AS
                                                 );
     FUNCTION encrypt_password(cp_string in varchar2) RETURN RAW;
     FUNCTION string_salted(cp_string in varchar2) RETURN varchar2;
+    FUNCTION validate_email(cp_string in varchar2) RETURN NUMBER;
     PROCEDURE insert_payment_method(description IN payment_method.description %TYPE);
     PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
                                             type IN permissions.type%TYPE, description  IN permissions.description%TYPE);
@@ -129,12 +130,53 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                dbms_output.put_line('---------------------------------------------------');
         end INSERT_ROLE;
 
+        FUNCTION validate_email(cp_string in varchar2) 
+            RETURN NUMBER IS 
+               b_isvalid   BOOLEAN;    
+            BEGIN 
+                  b_isvalid :=REGEXP_LIKE (cp_string,'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$');
+                    dbms_output.put_line(sys.diutil.bool_to_int(b_isvalid));
+               RETURN sys.diutil.bool_to_int(b_isvalid); 
+            END; 
+
+
         PROCEDURE insert_oxygen_plant_details(name in oxygen_cylinder_plant.name%TYPE,
         address in oxygen_cylinder_plant.address%TYPE, phone_number in oxygen_cylinder_plant.phone_number%TYPE,
         county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE)
         IS
+             invalid_input_data EXCEPTION;
+            PRAGMA exception_init( invalid_input_data, -20007 );
+            invalid_mail_entered EXCEPTION;
+            PRAGMA exception_init( invalid_mail_entered, -20008);
+            validate_email_data NUMBER;
+            validate_plant_name NUMBER;
+            validate_county NUMBER;
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
+            select validate_email(email_id) into validate_email_data from dual;
+            select REGEXP_INSTR(name, '[[:digit:]]') into validate_plant_name from dual;
+            select REGEXP_INSTR(county, '[[:digit:]]') into validate_county from dual;
+            
+            IF (validate_plant_name > 0 ) THEN
+                    dbms_output.put_line('Plant  name has numbers. Please remove them');
+                    raise_application_error(-20007,'Invalid Plant Name has been entered');
+                ELSE
+                    dbms_output.put_line('Entered valid Plant name');
+                END IF;
+            
+            IF (validate_county > 0 ) THEN
+                    dbms_output.put_line('Entered county has numbers. Please remove them');
+                    raise_application_error(-20007,'Invalid county has been entered');
+                ELSE
+                    dbms_output.put_line('Entered valid County name');
+                END IF;
+            
+            IF (validate_email_data = 1 ) THEN
+                    dbms_output.put_line('Valid email-id is entered.');
+                ELSE
+                    raise_application_error(-20008, 'Invalid mail-id is entered');
+                END IF;
+                
             insert into oxygen_cylinder_plant(PLANT_ID, NAME, ADDRESS, PHONE_NUMBER, COUNTY, EMAIL_ID,
                                     CREATED_ON, UPDATED_ON) VALUES (DEFAULT, name, address, phone_number, county, email_id, DEFAULT, DEFAULT) ;
             dbms_output.put_line('Row inserted into oxygen cylinder plant table');
@@ -173,6 +215,7 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                RETURN salt_string; 
             END; 
             
+         
 
         PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE)
