@@ -2,12 +2,12 @@
 
 --------------------------------------------------------- ROLE  TABLE DATA INSERTION ---------------------------------------------------------
 
-execute insertion.insert_role('Admin', 'Nithin', null);
-execute insertion.insert_role('Oxygen Supplier', 'Rajesh', 1);
-execute insertion.insert_role('Customer', 'Namratha', 1);
-execute insertion.insert_role('Customer', 'Sai', 1);
-execute insertion.insert_role('Oxygen Supplier', 'Liam', 1);
-execute insertion.insert_role('Customer', 'Akanksha', 1);
+execute insertion.insert_role('Admin', 'Admin role to delete or update or add', null);
+execute insertion.insert_role('Oxygen Supplier', 'Supplier who supplies oxygen to customers', 1);
+execute insertion.insert_role('Customer', 'Orders the oxygen from oxygen plant', 1);
+--execute insertion.insert_role('Customer', 'Sai', 1);
+--execute insertion.insert_role('Oxygen Supplier', 'Liam', 1);
+--execute insertion.insert_role('Customer', 'Akanksha', 1);
 
 --------------------------------------------------------- OXYGEN CYLINDER PLANT INSERTION ---------------------------------------------------------
 
