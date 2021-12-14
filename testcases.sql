@@ -14,3 +14,9 @@ execute insertion.insert_oxygen_plant_details('Sam Needs', '234, Gandhi Street',
 execute insertion.insert_oxygen_cylinder_details(1, 10000, 1);
 execute insertion.insert_oxygen_cylinder_details(1, 275, 2);
 
+
+--------------------------------------------------------- Payment Status Table INSERTION ---------------------------------------------------------
+
+execute insertion.insert_payment_status('Cansdjk123');
+execute insertion.insert_payment_status('Pen2adsg');
+

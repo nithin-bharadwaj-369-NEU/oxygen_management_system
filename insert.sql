@@ -91,7 +91,7 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
             -- Checking if number is present in role description and display name
-            select REGEXP_INSTR(role_description, '[[:digit:]]') into check_if_number_role_desc from dual;
+            select REGEXP_INSTR(role_description, '[[:digit:]/@&#$%*(]') into check_if_number_role_desc from dual;
             select REGEXP_INSTR(display_name, '[[:digit:]]') into check_if_number_display_name from dual;
             IF (check_if_number_role_desc > 0 ) THEN
                     dbms_output.put_line('Role description has numbers. Please remove them');
@@ -256,7 +256,18 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
 
         PROCEDURE insert_payment_status(status_description IN payment_status.status_description%TYPE)
             IS
+                check_status_description NUMBER;
+                description_invalid EXCEPTION;
+                PRAGMA exception_init( description_invalid, -20010 ); --User defined exception  ORA-20000 through ORA-20999
             BEGIN
+                    select REGEXP_INSTR(status_description, '[[:digit:]]') into check_status_description from dual;
+                    IF (check_status_description > 0 ) THEN
+                        dbms_output.put_line('Payment description has numbers. Please remove them');
+                        raise_application_error(-20010,'Invalid Description Entered');
+                    ELSE
+                        dbms_output.put_line('Entered valid Payment description');
+                    END IF;
+            
                 dbms_output.put_line('---------------------------------------------------');
                 insert into payment_status(PAYMENT_STATUS_CODE, status_description, created_on)
                         VALUES (DEFAULT, status_description , DEFAULT) ;
@@ -274,10 +285,11 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line('---------------------------------------------------');
             end insert_payment_status;
 
-        PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
+            PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
                             name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
                             covid_status IN patient_details.covid_status%TYPE, county IN patient_details.county%TYPE)
             IS
+                
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
                 insert into patient_details(covid_report_id, name, address, covid_status, county)
