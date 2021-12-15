@@ -41,7 +41,8 @@ AS
                                             role_id IN Account.role_id%TYPE,
                                             modified_by_id IN ACCOUNT.modified_by_id%TYPE,
                                             account_status_id  IN ACCOUNT.account_status_id%TYPE,
-                                            password_id IN ACCOUNT.password_id%TYPE );
+                                            password_id IN ACCOUNT.password_id%TYPE,
+                                            plant_id IN ACCOUNT.plant_id%TYPE);
     PROCEDURE insert_account_role_mapping_table(account_id  IN account_role_mapping_history.account_id%TYPE,
                                             role_id  IN account_role_mapping_history.role_id%TYPE,
                                             created_by_id  IN account_role_mapping_history.created_by_id%TYPE);
@@ -75,7 +76,7 @@ END INSERTION;
 
 CREATE OR REPLACE PACKAGE BODY INSERTION
     AS
-        PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE,
+         PROCEDURE INSERT_ROLE(role_description in role.role_description%TYPE,
         display_name in role.display_name%TYPE,
         CREATED_BY_ID in role.created_by_id%TYPE)
         IS
@@ -87,7 +88,7 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
             PRAGMA exception_init( display_name_invalid, -20005 );
             role_invalid EXCEPTION;
             PRAGMA exception_init( role_invalid, -20006 );
-            
+
         BEGIN
             dbms_output.put_line('---------------------------------------------------');
             -- Checking if number is present in role description and display name
@@ -99,20 +100,20 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                 ELSE
                     dbms_output.put_line('Entered valid Role description');
                 END IF;
-            
+
             IF (check_if_number_display_name > 0 ) THEN
-                    dbms_output.put_line('Role description has numbers. Please remove them');
+                    dbms_output.put_line('Display name has numbers. Please remove them');
                     raise_application_error(-20005,'Invalid DIsplay name Entered');
                 ELSE
                     dbms_output.put_line('Entered valid Display name');
                 END IF;
-                
-            -- Checking if role entered is in Customer, Admin and OxygenPlant
-            IF (role_description ='Customer' or  role_description ='Oxygen Supplier' or role_description ='Admin') THEN
-                    dbms_output.put_line('Entered valid Role');
-                ELSE
-                    raise_application_error(-20006,'Invalid Role Entered');
-                END IF;
+
+             --Checking if role entered is in Customer, Admin and OxygenPlant
+--            IF (role_description ='Customer' or  role_description ='Oxygen Supplier' or role_description ='Admin') THEN
+--                    dbms_output.put_line('Entered valid Role');
+--                ELSE
+--                    raise_application_error(-20006,'Invalid Role Entered');
+--                END IF;
                 
             insert into ROLE(ROLE_ID, ROLE_DESCRIPTION, DISPLAY_NAME,
                                     CREATED_BY_ID,CREATED_ON) VALUES (DEFAULT, role_description, display_name, created_by_id, DEFAULT) ;
@@ -518,7 +519,8 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                             role_id IN Account.role_id%TYPE,
                                             modified_by_id IN ACCOUNT.modified_by_id%TYPE,
                                             account_status_id  IN ACCOUNT.account_status_id%TYPE,
-                                            password_id IN ACCOUNT.password_id%TYPE )
+                                            password_id IN ACCOUNT.password_id%TYPE,
+                                            plant_id IN ACCOUNT.plant_id%TYPE)
             IS
                 check_if_number_name NUMBER;  
                 check_role_id NUMBER;
@@ -539,7 +541,8 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                             from(
                         select count(role_id) as cnt from role where role_id = role_id
                         ); 
-                
+                dbms_output.put_line('check_role_id : ' || check_role_id);
+
                 IF (check_role_id > 0 ) THEN
                     dbms_output.put_line('Valid Role-id has been entered');
                 ELSE
@@ -559,8 +562,8 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                 END IF;
                 
                 insert into account(ACCOUNT_ID, DISPLAY_NAME, EMAIL_ID,  ROLE_ID, PHONE_NUMBER, ADDRESS, COUNTY, created_on ,
-                 MODIFIED_BY_ID, MODIFIED_ON , ACCOUNT_STATUS_ID, PASSWORD_ID)
-                    VALUES (DEFAULT, display_name, email_id, role_id, phone_number, address, county, DEFAULT, null, DEFAULT, account_status_id ,DEFAULT) ;
+                 MODIFIED_BY_ID, MODIFIED_ON , ACCOUNT_STATUS_ID, PASSWORD_ID, PLANT_ID)
+                    VALUES (DEFAULT, display_name, email_id, role_id, phone_number, address, county, DEFAULT, null, DEFAULT, account_status_id , password_id, plant_id) ;
                 dbms_output.put_line('Row inserted into Account table');
                 dbms_output.put_line('---------------------------------------------------');
             commit;
