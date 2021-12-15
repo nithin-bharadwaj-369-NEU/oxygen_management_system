@@ -88,11 +88,22 @@ END;
 
 BEGIN
     -- If plant admin has logged in to the system
-            FOR v_rec IN (select plant_id, quantity from oxygen_cylinder_details where available_status =1 and plant_id = 11 group by plant_id, quantity order by plant_id) LOOP       
-                    dbms_output.put_line('Plant-Id=' || v_rec.plant_id || ', Quantity=' || v_rec.quantity );
+            FOR v_rec IN (select plant_id, cylinder_id, quantity from oxygen_cylinder_details where plant_id = 1 group by plant_id, quantity order by plant_id) LOOP       
+                    dbms_output.put_line('Plant-Id=' || v_rec.plant_id || 'Cylinder-Id=' || v_rec.cylinder_id || ', Quantity=' || v_rec.quantity );
                 END LOOP; 
-        dbms_output.put_line('>>> Above is the inventory ');  
+        dbms_output.put_line('>>> Above is the available inventory ');  
 END;
+
+CREATE PROCEDURE insert_new_data(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
+                        quantity IN oxygen_cylinder_details.quantity%TYPE, 
+                        available_status IN oxygen_cylinder_details.available_status%TYPE)
+IS 
+    BEGIN
+        dbms_output.put_line('Inside insert new data procedure');
+        insert_oxygen_cylinder_details(plant_id, quantity, available_status);
+    END;
+/
+
 
 
 CREATE PROCEDURE checkout_order(account_id IN account.account_id%TYPE,
