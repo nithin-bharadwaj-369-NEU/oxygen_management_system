@@ -469,24 +469,45 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
             end insert_payment_method;
 
             PROCEDURE insert_permissions_method(role_id IN permissions.role_id%TYPE,
-                                            type IN permissions.type%TYPE, description  IN permissions.description%TYPE)
-            IS
-            BEGIN
-                dbms_output.put_line('---------------------------------------------------');
-                insert into permissions(PERMISSION_ID, ROLE_ID, TYPE, DESCRIPTION, created_on)
+                    type IN permissions.type%TYPE, description IN permissions.description%TYPE)
+                IS
+                    invalid_input_data EXCEPTION;
+                    PRAGMA exception_init( invalid_input_data, -20021 );
+                    invalid_pdescription_entered EXCEPTION;
+                    PRAGMA exception_init( invalid_pdescription_entered, -20022);
+                    validate_permission_description NUMBER;
+                BEGIN
+                    dbms_output.put_line('---------------------------------------------------');
+                    select REGEXP_INSTR(description, '[[:digit:]/@&#$%*(]') into validate_permission_description from dual;                    
+                    
+                    IF (type <> 'ADM' or type <> 'CUST' or type <> 'SUP') THEN
+                        dbms_output.put_line(' Type is invalid. Please enter correct permission type.');
+                        raise_application_error(-20021,'Invalid permission type has been entered');
+                    ELSE
+                        dbms_output.put_line('Entered valid Permission type name');
+                    END IF;
+                    
+                    IF (validate_permission_description > 0 ) THEN
+                        dbms_output.put_line('Entered description has numbers. Please remove them');
+                        raise_application_error(-20022,'Invalid description has been entered');
+                    ELSE
+                       dbms_output.put_line('Entered valid County name');
+                    END IF;
+                    
+                        insert into permissions(PERMISSION_ID, ROLE_ID, TYPE, DESCRIPTION, created_on)
                         VALUES (DEFAULT, role_id , type, description , DEFAULT) ;
-                dbms_output.put_line('Row inserted into Permissions table');
-                dbms_output.put_line('---------------------------------------------------');
-            commit;
-            exception
-                when dup_val_on_index then
-                   dbms_output.put_line('duplicate value found || insert different value');
-                when others then
-                   dbms_output.put_line('Error while inserting data into Permissions Table');
-                    rollback;
-                   dbms_output.put_line('The error encountered is: ');
-                   dbms_output.put_line(dbms_utility.format_error_stack);
-                   dbms_output.put_line('---------------------------------------------------');
+                        dbms_output.put_line('Row inserted into Permissions table');
+                        dbms_output.put_line('---------------------------------------------------');
+                        commit;
+                    exception
+                        when dup_val_on_index then
+                            dbms_output.put_line('duplicate value found || insert different value');
+                        when others then
+                            dbms_output.put_line('Error while inserting data into Permissions Table');
+                        rollback;
+                        dbms_output.put_line('The error encountered is: ');
+                        dbms_output.put_line(dbms_utility.format_error_stack);
+                        dbms_output.put_line('---------------------------------------------------');
             end insert_permissions_method;
 
             PROCEDURE insert_account_table(display_name IN Account.display_name%TYPE,
@@ -499,8 +520,44 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                             account_status_id  IN ACCOUNT.account_status_id%TYPE,
                                             password_id IN ACCOUNT.password_id%TYPE )
             IS
+                check_if_number_name NUMBER;  
+                check_role_id NUMBER;
+                check_password_id NUMBER;
+                validate_email_data NUMBER;
+                role_invalid EXCEPTION;
+                PRAGMA exception_init( role_invalid, -20017 ); --User defined exception  ORA-20000 through ORA-20999
+                invalid_data_input EXCEPTION;
+                PRAGMA exception_init( invalid_data_input, -20018 ); --User defined exception  ORA-20000 through ORA-20999
+
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
+                select REGEXP_INSTR(display_name, '[[:digit:]/@&#$%*(]') into check_if_number_name from dual;
+                select validate_email(email_id) into validate_email_data from dual;
+                -- Checking if the role-id exists
+                select case when cnt > 0 then 1
+                            else 0 end into check_role_id
+                            from(
+                        select count(role_id) as cnt from role where role_id = role_id
+                        ); 
+                
+                IF (check_role_id > 0 ) THEN
+                    dbms_output.put_line('Valid Role-id has been entered');
+                ELSE
+                    raise_application_error(-20017,'Invalid Role Entered');
+                END IF;
+
+                IF (check_if_number_name > 0 ) THEN
+                    raise_application_error(-20018,'Invalid Display name Entered');
+                ELSE
+                    dbms_output.put_line( 'Valid display name entered');
+                END IF;                
+                
+                IF (validate_email_data = 1 ) THEN
+                    dbms_output.put_line('Valid email-id is entered.');
+                ELSE
+                    raise_application_error(-20018, 'Invalid Email is entered');
+                END IF;
+                
                 insert into account(ACCOUNT_ID, DISPLAY_NAME, EMAIL_ID,  ROLE_ID, PHONE_NUMBER, ADDRESS, COUNTY, created_on ,
                  MODIFIED_BY_ID, MODIFIED_ON , ACCOUNT_STATUS_ID, PASSWORD_ID)
                     VALUES (DEFAULT, display_name, email_id, role_id, phone_number, address, county, DEFAULT, null, DEFAULT, account_status_id ,DEFAULT) ;
@@ -522,8 +579,41 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                             role_id  IN account_role_mapping_history.role_id%TYPE,
                                             created_by_id  IN account_role_mapping_history.created_by_id%TYPE)
             IS
+                check_role_id NUMBER;
+                check_account_id NUMBER;
+                role_invalid EXCEPTION;
+                PRAGMA exception_init( role_invalid, -20019 ); --User defined exception  ORA-20000 through ORA-20999
+                account_invalid EXCEPTION;
+                PRAGMA exception_init( role_invalid, -20020 ); --User defined exception  ORA-20000 through ORA-20999
             BEGIN
                 dbms_output.put_line('---------------------------------------------------');
+                -- Checking if the role-id exists
+                    select case when cnt > 0 then 1
+                            else 0 end into check_role_id
+                            from(
+                        select count(role_id) as cnt from role where role_id = role_id
+                        ); 
+                
+                IF (check_role_id > 0 ) THEN
+                    dbms_output.put_line('Valid Role-id has been entered');
+                ELSE
+                    raise_application_error(-20019,'Invalid Role Entered');
+                END IF;
+                
+                -- Checking if the account-id exists
+                    select case when cnt > 0 then 1
+                            else 0 end into check_account_id
+                            from(
+                        select count(account_id) as cnt from account where account_id = account_id
+                        ); 
+                
+                IF (check_account_id > 0 ) THEN
+                    dbms_output.put_line('Valid Account-id has been entered');
+                ELSE
+                    raise_application_error(-20020,'Invalid Account Entered');
+                END IF;
+                
+                
                 insert into account_role_mapping_history (MAPPING_ID, ACCOUNT_ID, ROLE_ID, CREATED_ON, created_by_id)
                         VALUES (DEFAULT, account_id , role_id, DEFAULT , null) ;
                 dbms_output.put_line('Row inserted into Account role mapping history table');
