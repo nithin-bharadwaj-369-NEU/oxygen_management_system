@@ -8,7 +8,7 @@ end drop_table;
 /
 
 BEGIN
-        dbms_output.put_line('-----------------------------------------Firing Role table destruction Procedure------------------------------------------------------------------');
+        dbms_output.put_line('>>> Dropping Role table using Procedure');
         drop_table('ROLE');
 EXCEPTION
         WHEN OTHERS THEN
@@ -16,10 +16,11 @@ EXCEPTION
                 RAISE;
             END IF;
             dbms_output.put_line('Table does not exist to drop from database');
-            dbms_output.put_line('--------------------------------------------------------------------------------------------------------------------------------------------------------');
+         dbms_output.put_line('>>> Executuion of procedure is Done to drop role table');
+
 END;
 /
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 BEGIN
         dbms_output.put_line('-----------------------------------------Firing Account table destruction Procedure------------------------------------------------------------------');
