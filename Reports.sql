@@ -1,3 +1,29 @@
+-- REPORTS --
+
+--- 1. View Payment Status ---
+
+select paymentStatus, 'Orders_Count', count(numOfOrders)
+from VwPaymentStatus group by paymentStatus;
+
+--- 2. Demand in a county based on number of plants ----
+
+select County_name, 'Number_of_Plants', count(plant_name) from VwDemand group by county_name;
+
+---- 3. Available cylinders in a plant ---
+
+select Plant_Name,'Available_Cylinders', sum(numberOfUnits) 
+from VWcylinder_details 
+WHERE availability = 1 
+Group by plant_name;
+
+---- 4. Number of orders placed in each plant ----
+
+select plant_name, 'Num_Of_Orders', count(OrderCount) 
+from VwOrders_InPlant 
+group by plant_name;
+
+--- SQL SELECT queries reports ---
+
 -- Count of orders raised at a Plant.
 
 SELECT p.name,'Number of ORDERS raised to a Plant', COUNT(*)
