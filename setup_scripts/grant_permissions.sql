@@ -1,9 +1,18 @@
+-- Author Nithin Bharadwaj
+
+--DROP USER TEST_USER_1 CASCADE; 
+
 DECLARE 
+    user_exist INT;
     user_name_to_create VARCHAR2(100);
 BEGIN
-        dbms_output.put_line('>>> Creating user using Procedure');
-        user_name_to_create:='TEST_USER_1';
-        EXECUTE IMMEDIATE 'create user ' || user_name_to_create || ' identified by Oxygenmanagementsystem123';
+         dbms_output.put_line('>>> Creating user using Procedure');
+         user_name_to_create:='TEST_USER_1';
+         select count(*) into user_exist from dba_users where username=user_name_to_create;
+            dbms_output.put_line('>>> User exist status ' || user_exist);
+            IF (user_exist = 0) then
+                EXECUTE IMMEDIATE 'create user ' || user_name_to_create || ' identified by Oxygenmanagementsystem123';
+            END IF;
         dbms_output.put_line('>>> Allowing user to login');
         EXECUTE IMMEDIATE 'grant connect to ' || user_name_to_create ;
         dbms_output.put_line('>>> Allowing user to create a session and do ad-hoc');
@@ -18,15 +27,17 @@ BEGIN
         EXECUTE IMMEDIATE 'grant select any table to ' || user_name_to_create;
         dbms_output.put_line('>>> Allowing user to create directory');
         EXECUTE IMMEDIATE 'grant create any directory, drop any directory to ' || user_name_to_create;
-
---        EXECUTE IMMEDIATE 'GRANT INSERT ON ' || user_name_to_create;
-
---
---GRANT INSERT ON "ADMIN"."ACCOUNT" TO "TEST_USER_1" WITH GRANT OPTION;
---GRANT SELECT ON "ADMIN"."ACCOUNT" TO "TEST_USER_1" WITH GRANT OPTION;
---grant references on "ADMIN"."ACCOUNT" TO "TEST_USER_1" WITH GRANT OPTION; -- To alter table
---GRANT UPDATE ON "ADMIN"."ACCOUNT" TO "TEST_USER_1" WITH GRANT OPTION;
-
+        dbms_output.put_line('>>> Granting access to crypto package');
+        EXECUTE IMMEDIATE 'grant execute on sys.dbms_crypto ' || user_name_to_create;
+        dbms_output.put_line('>>> Granting access to crypto package');
+        EXECUTE IMMEDIATE 'grant execute on sys.dbms_crypto ' || user_name_to_create;
+        dbms_output.put_line('>>> Granting access to Random package');
+        EXECUTE IMMEDIATE 'grant execute on sys.dbms_random ' || user_name_to_create;
+        dbms_output.put_line('>>> Allowing user to insert and update account table');
+        EXECUTE IMMEDIATE 'GRANT INSERT ON "ADMIN"."ACCOUNT" TO ' || user_name_to_create || ' WITH GRANT OPTION' ;
+        EXECUTE IMMEDIATE 'GRANT UPDATE ON "ADMIN"."ACCOUNT" TO ' || user_name_to_create || ' WITH GRANT OPTION' ;
+        EXECUTE IMMEDIATE 'GRANT REFERENCES ON "ADMIN"."ACCOUNT" TO ' || user_name_to_create || ' WITH GRANT OPTION' ;
+        EXECUTE IMMEDIATE 'GRANT SELECT ON "ADMIN"."ACCOUNT" TO ' || user_name_to_create || ' WITH GRANT OPTION' ;
         
 EXCEPTION
         WHEN OTHERS THEN
@@ -36,6 +47,4 @@ EXCEPTION
     dbms_output.put_line('>>> Executuion of procedure is Done to create a new user');
 END;
 /
-
-
 
