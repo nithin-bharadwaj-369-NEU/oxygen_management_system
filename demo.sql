@@ -88,7 +88,7 @@ END;
 
 BEGIN
     -- If plant admin has logged in to the system
-            FOR v_rec IN (select plant_id, cylinder_id, quantity from oxygen_cylinder_details where plant_id = 1 group by plant_id, quantity order by plant_id) LOOP       
+            FOR v_rec IN (select plant_id, cylinder_id, quantity from oxygen_cylinder_details where plant_id = 1 group by plant_id, cylinder_id, quantity order by plant_id) LOOP       
                     dbms_output.put_line('Plant-Id=' || v_rec.plant_id || 'Cylinder-Id=' || v_rec.cylinder_id || ', Quantity=' || v_rec.quantity );
                 END LOOP; 
         dbms_output.put_line('>>> Above is the available inventory ');  

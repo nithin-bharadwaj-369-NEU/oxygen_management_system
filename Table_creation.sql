@@ -572,8 +572,10 @@ DECLARE
                               modified_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               account_status_id NUMBER(2,0),
                               password_id NUMBER(20,0),
+                              plant_id INT ,
                               PRIMARY KEY (account_id),
                               CONSTRAINT FK_Account_status_id FOREIGN KEY (account_status_id) REFERENCES account_status(status_id),
+                              CONSTRAINT FK_Account_plant_id FOREIGN KEY (plant_id) REFERENCES OXYGEN_CYLINDER_PLANT(plant_id),
                               CONSTRAINT FK_Account_password_id FOREIGN KEY (password_id) REFERENCES PASSWORD(password_id),
                               CONSTRAINT FK_Account_role_id FOREIGN KEY (role_id) REFERENCES ROLE(role_id))' ;
                 EXECUTE IMMEDIATE table_query;
