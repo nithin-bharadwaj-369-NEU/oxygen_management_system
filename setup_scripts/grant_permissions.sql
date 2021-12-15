@@ -1,6 +1,6 @@
 ---- Author Nithin Bharadwaj
 --
---DROP USER TEST_USER_1 CASCADE; 
+DROP USER TEST_USER_1 CASCADE; 
 --
 DECLARE 
     user_name_to_create VARCHAR2(100);
@@ -26,6 +26,8 @@ BEGIN
         EXECUTE IMMEDIATE 'grant execute on sys.dbms_crypto to ' || user_name_to_create;
         dbms_output.put_line('>>> Granting access to Random package');
         EXECUTE IMMEDIATE 'grant execute on sys.dbms_random to ' || user_name_to_create;
+        dbms_output.put_line('>>> Granting tablespace to USER');
+        EXECUTE IMMEDIATE 'GRANT UNLIMITED TABLESPACE to ' || user_name_to_create;
         dbms_output.put_line('>>> Allowing user to insert and update account table');
         EXECUTE IMMEDIATE 'GRANT INSERT ON "ADMIN"."ACCOUNT" TO ' || user_name_to_create || ' WITH GRANT OPTION' ;
         EXECUTE IMMEDIATE 'GRANT UPDATE ON "ADMIN"."ACCOUNT" TO ' || user_name_to_create || ' WITH GRANT OPTION' ;
@@ -42,6 +44,6 @@ EXCEPTION
 END;
 /
 
-grant execute on sys.dbms_crypto to TEST_USER_1;
-grant execute on sys.dbms_random to TEST_USER_1;
+--grant execute on sys.dbms_crypto to TEST_USER_1;
+--grant execute on sys.dbms_random to TEST_USER_1;
 

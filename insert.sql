@@ -16,6 +16,8 @@ AS
         county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE);
     PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE);
+    PROCEDURE update_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
+                            cylinder_id_input in oxygen_cylinder_details.cylinder_id%TYPE, available_status_input IN oxygen_cylinder_details.available_status%TYPE);
     PROCEDURE insert_payment_status(status_description  IN payment_status.status_description%TYPE);
     PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
                             name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
@@ -254,6 +256,48 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('---------------------------------------------------');
             end insert_oxygen_cylinder_details;
+
+
+        PROCEDURE update_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
+                            cylinder_id_input in oxygen_cylinder_details.cylinder_id%TYPE, available_status_input IN oxygen_cylinder_details.available_status%TYPE)
+            IS
+                invalid_data_entered EXCEPTION;
+                PRAGMA exception_init( invalid_data_entered, -20009);
+                valid_cylinder_id INT;
+            BEGIN
+                IF (available_status_input = 0 or available_status_input = 1 ) THEN
+                    dbms_output.put_line('Entered valid available status');
+                ELSE
+                        raise_application_error(-20009, 'Invalid Available status is entered');
+                END IF;
+                
+                select count(cylinder_id) into valid_cylinder_id from oxygen_cylinder_details where cylinder_id = cylinder_id_input;
+                
+                IF (valid_cylinder_id =0 ) THEN
+                    dbms_output.put_line('Entered Invalid oxygen cylinder id');
+                    raise_application_error(-20009, 'Invalid Cylinder Id is entered');
+                ELSE
+                    dbms_output.put_line('Entered Valid Cylinder-id ');
+                END IF;
+                
+                update oxygen_cylinder_details
+                    set available_status = available_status_input
+                    where cylinder_id = cylinder_id_input;
+                dbms_output.put_line('Row updated in Oxygen cylinder details table');
+                
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while inserting data into OXygen Cylidner details Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('---------------------------------------------------');
+            end update_oxygen_cylinder_details;
+
+
 
         PROCEDURE insert_payment_status(status_description IN payment_status.status_description%TYPE)
             IS
