@@ -115,11 +115,11 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                 END IF;
 
              --Checking if role entered is in Customer, Admin and OxygenPlant
---            IF (role_description ='Customer' or  role_description ='Oxygen Supplier' or role_description ='Admin') THEN
---                    dbms_output.put_line('Entered valid Role');
---                ELSE
---                    raise_application_error(-20006,'Invalid Role Entered');
---                END IF;
+                IF (role_description ='Customer' or  role_description ='Oxygen Supplier' or role_description ='Admin') THEN
+                    dbms_output.put_line('Entered valid Role');
+                ELSE
+                    raise_application_error(-20006,'Invalid Role Entered');
+                END IF;
 
             insert into ROLE(ROLE_ID, ROLE_DESCRIPTION, DISPLAY_NAME,
                                     CREATED_BY_ID,CREATED_ON) VALUES (DEFAULT, role_description, display_name, created_by_id, DEFAULT) ;
