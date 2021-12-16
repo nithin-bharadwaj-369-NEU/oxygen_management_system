@@ -34,14 +34,17 @@ This repo has schema and the necessary code to populate data for working of oxyg
 - Once done with the above script, run the 3_Table_creation.sql to create tables
     - This script will create the necessary tables needed for project with indexes.
 #### <ins>Step 4</ins>     
-- After running the tables scripts, run the 4_insert.sql file to create records 
-    - This script will create the records in the tables
+- After running the tables scripts, run the 4_insert.sql file to create stored procedures and packages needed for insertion 
+
 #### <ins>Step 5</ins>      
 - After inserting the records into the tables, run the 5_insert_data.sql
-    - This script will insert data into the tables 
+    - This script will populate data into the tables 
 #### <ins>Step 6</ins>
 - Once done with the above script, run the 6_views.sql file  
+    - This script generates the views to create user reports and charts for visualization
 #### <ins>Step 7</ins> 
 - Following up with the above script, runt the 7_triggers.sql file
+    - This script will create triggers
 #### <ins>Step 8</ins> 
 - After running the trigger scripts, run the 8_testcases.sql file 
+    - This script is used to validate the error handling of the data when invalid data is given as input.
