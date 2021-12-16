@@ -83,29 +83,31 @@ execute insertion.insert_patient_details(34522718, 'Dev', '11, Roxbury street', 
 
 --------------------------------------------------------- Rental Price Table INSERTION ---------------------------------------------------------
 -- TIMESTAMP format - 'DD-MM-YY HH:MM:SS.FF'
-
-execute insertion.insert_rental_price(TIMESTAMP '10-12-21 09:26:50.12', 150);
-execute insertion.insert_rental_price(TIMESTAMP '9-12-21 09:26:50.12', 130);
-execute insertion.insert_rental_price(TIMESTAMP '8-12-21 09:26:50.12', 100);
-execute insertion.insert_rental_price(TIMESTAMP '7-12-21 09:26:50.12', 140);
-execute insertion.insert_rental_price(TIMESTAMP '6-12-21 09:26:50.12', 115);
-execute insertion.insert_rental_price(TIMESTAMP '5-12-21 09:26:50.12', 115);
-execute insertion.insert_rental_price(TIMESTAMP '4-12-21 09:26:50.12', 80);
-execute insertion.insert_rental_price(TIMESTAMP '3-12-21 09:26:50.12', 90);
-execute insertion.insert_rental_price(TIMESTAMP '2-12-21 09:26:50.12', 50);
-execute insertion.insert_rental_price(TIMESTAMP '1-12-21 09:26:50.12', 35);
-execute insertion.insert_rental_price(TIMESTAMP '30-11-21 09:26:50.12', 90);
-execute insertion.insert_rental_price(TIMESTAMP '28-11-21 09:26:50.12', 115);
-execute insertion.insert_rental_price(TIMESTAMP '27-11-21 09:26:50.12', 130);
-execute insertion.insert_rental_price(TIMESTAMP '26-11-21 09:26:50.12', 45);
-execute insertion.insert_rental_price(TIMESTAMP '25-11-21 09:26:50.12', 30);
-execute insertion.insert_rental_price(TIMESTAMP '24-11-21 09:26:50.12', 50);
-execute insertion.insert_rental_price(TIMESTAMP '23-11-21 09:26:50.12', 25);
-execute insertion.insert_rental_price(TIMESTAMP '22-11-21 09:26:50.12', 50);
-execute insertion.insert_rental_price(TIMESTAMP '21-11-21 09:26:50.12', 60);
-execute insertion.insert_rental_price(TIMESTAMP '20-11-21 09:26:50.12', 20);
-
---insert into rental_price VALUES(DEFAULT, TIMESTAMP '2021-01-31 09:26:50.12', 200.0);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-14 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),130);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-13 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),120);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-12 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),100);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-11 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),110);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-10 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),150);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-09 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),130);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-08 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),100);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-07 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),140);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-06 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),115);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-05 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),115);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-04 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),80);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),90);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-02 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),50);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-12-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),35);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-30 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),90);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-29 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),80);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-28 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),115);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-27 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),130);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-26 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),45);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-25 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),30);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-24 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),50);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-23 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),25);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-22 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),50);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-21 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),60);
+execute insertion.insert_rental_price(TO_TIMESTAMP('2021-11-20 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),20);
 
 
 --------------------------------------------------------- Account status Table INSERTION ---------------------------------------------------------

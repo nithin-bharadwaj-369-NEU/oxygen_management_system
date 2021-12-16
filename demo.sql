@@ -87,7 +87,7 @@ END;
 
 BEGIN
     -- If plant admin has logged in to the system
-            FOR v_rec IN (select plant_id, cylinder_id, quantity, available_status from oxygen_cylinder_details where plant_id = 1  order by plant_id) LOOP       
+            FOR v_rec IN (select plant_id, cylinder_id, quantity, available_status from oxygen_cylinder_details where plant_id = 2 order by plant_id) LOOP       
 --                    dbms_output.put_line(v_rec.available_status);
                     dbms_output.put_line('Plant-Id=' || v_rec.plant_id || ' , Cylinder-Id=' || v_rec.cylinder_id || ' , Quantity=' || v_rec.quantity || ' , Available Status : ' || v_rec.available_status );
                 END LOOP; 
@@ -95,7 +95,7 @@ BEGIN
 END;
 
 
-CREATE PROCEDURE insert_new_cylinder_data(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
+CREATE OR REPLACE PROCEDURE insert_new_cylinder_data(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                         quantity IN oxygen_cylinder_details.quantity%TYPE, 
                         available_status IN oxygen_cylinder_details.available_status%TYPE)
 IS 
@@ -106,7 +106,7 @@ IS
 /
 
 BEGIN
-        insert_new_cylinder_data(1, &quantity, &status);
+        insert_new_cylinder_data(2, &quantity, &status);
 END;
 /
 
@@ -117,17 +117,78 @@ END;
 /
 
 
-CREATE PROCEDURE checkout_order(account_id IN account.account_id%TYPE,
-                    quantity IN NUMBER, plant_id IN NUMBER)
-IS 
-                
+-- Get the price of the cylinder for customer
+
+
+DECLARE
+        price_id_data int;
+        current_price number;
     BEGIN
-        dbms_output.put_line('Inside procedure');
+        dbms_output.put_line('>>> Customer checks out the order');
+        select price_id into price_id_data from rental_price where trunc(created_on) = to_date('2021-12-14', 'YYYY-MM-DD');
+            dbms_output.put_line('Price-id : ' || price_id_data);
+        select  price into current_price from rental_price where price_id = price_id_data;  
+        dbms_output.put_line('Total bill to pay : ' || current_price);
     END;
 /
 
---https://stackoverflow.com/questions/46417173/generate-ip-address-in-oracle
 
--- select trunc(dbms_random.value(12,256) ) || '.' || trunc(dbms_random.value(123,256) ) || '.' || trunc(dbms_random.value(60,256) )|| '.' || trunc(dbms_random.value(165,256) )
---          as ip_address
---   from dual
+
+CREATE OR REPLACE FUNCTION calcualte_final_price(quantity in NUMBER, price IN NUMBER) 
+            RETURN NUMBER IS 
+               total_price NUMBER; 
+            BEGIN 
+                    total_price:= (quantity/100)*price ;
+               RETURN total_price; 
+    END; 
+/
+
+CREATE OR REPLACE PROCEDURE order_cylinder_new(account_id_input IN account.account_id%TYPE,
+                    quantity_input IN oxygen_cylinder_details.quantity%TYPE, plant_id_input IN oxygen_cylinder_details.plant_id%TYPE,
+                    cylinder_id_input IN oxygen_cylinder_details.cylinder_id%TYPE,
+                    covid_report_id_input IN patient_details.covid_report_id%TYPE,
+                    patient_name IN patient_details.name%TYPE, patient_address IN patient_details.address%TYPE, 
+                    covid_status IN patient_details.covid_status%TYPE )
+IS 
+        price_id_data int;
+        current_price number;
+        final_price number;
+        final_paid_amt NUMBER;
+        final_due_amt NUMBER;
+        payment_method_id INT;
+        transaction_id_to_use INT;
+        payment_status_code INT;
+    BEGIN
+            dbms_output.put_line('Inside order cylinder procedure');
+                select price_id into price_id_data from rental_price where trunc(created_on) = to_date('2021-12-14', 'YYYY-MM-DD');
+            dbms_output.put_line('Price-id : ' || price_id_data);
+                select  price into current_price from rental_price where price_id = price_id_data;  
+                dbms_output.put_line('Total bill to pay : ' || current_price);
+                insertion.insert_patient_details(covid_report_id_input, patient_name, patient_address, covid_status);
+            dbms_output.put_line('Choose method to pay ' );
+
+            dbms_output.put_line('>>> Possible Payment methods ');
+                dbms_output.put_line('>>> Choose 1 for Credit Card ');
+                dbms_output.put_line('>>> Choose 2 for Debit Card ');
+                dbms_output.put_line('>>> Choose 3 for E-check ');
+                dbms_output.put_line('>>> Choose 4 for Paypal ');
+            payment_method_id:=1;
+            final_price:=calcualte_final_price(quantity_input, current_price);
+            final_paid_amt:= final_price;
+            fina_due_amt:=0;
+            insertion.insert_renter_payment_checkout(payment_method_id, 1, 'Need the oxygen ASAP', final_paid_amt, final_due_amt);
+            select max(transaction_id) into transaction_id_to_use  from renter_payment_checkout ;
+              IF final_due_amt >0 THEN
+                    payment_status_code:=6;
+              ELSIF final_due_amt = 0 THEN    
+                    payment_status_code:=1;
+                END IF;
+        insert.insert_order(1, price_id_data, transaction_id_to_use, payment_status_code, cylinder_id_input, plant_id_input, covid_report_id_input, SYSDATE, SYSDATE +15 );
+    END;
+/
+
+BEGIN
+        order_cylinder_new(1, 500, 1, 1, 92345600, 'Vamratha', 'pasdataksda andkj',  0);
+END;
+/
+
