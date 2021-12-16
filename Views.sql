@@ -70,4 +70,3 @@ ON o.plant_id = p.plant_id;
 ---
 
 
-----------------
