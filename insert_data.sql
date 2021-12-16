@@ -23,7 +23,11 @@ execute insertion.insert_oxygen_plant_details('HITAM Multispeciality Life suppor
 execute insertion.insert_oxygen_plant_details('Apollo', '881, Boylston Street', 6176859696, 'Franklin', 'josephplant@gmail.com');
 execute insertion.insert_oxygen_plant_details('Kamineni Plant', '179, Rose Street', 6145336790, 'Nantucket', 'josephplant@gmail.com');
 execute insertion.insert_oxygen_plant_details('Miracle Clinic', '120, Longwood', 6111159696, 'Norfolk', 'josephplant@gmail.com');
-execute insertion.insert_oxygen_plant_details('Hope Life Support', '179, Copley', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston helps', '180, baker street', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston cares', '185, tremont street', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston hubs', '123, park street', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston protect', '126, macys street', 6145201795, 'Nantucket', 'josephplant@gmail.com');
+
 
 
 
