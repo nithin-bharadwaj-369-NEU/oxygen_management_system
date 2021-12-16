@@ -204,6 +204,8 @@ execute insertion.insert_account_table('Nayan', 'nayan.shah@gmail.com', 98334251
 execute insertion.insert_account_table('Dhruv', 'dhruv.asd@gmail.com', 8898123456, 'RTC cross Rd', 'Norflok', 3, null, 1, 32,NULL);
 execute insertion.insert_account_table('Veeramani', 'veera.reddy@gmail.com', 7564890039, 'Prudential St', 'Sufflok', 3, null, 1, 33,NULL);
 execute insertion.insert_account_table('Arun', 'Aarun.r@gmail.com', 8977489389, '56 J Vue', 'Sufflok', 3, null, 1, 34,NULL);
+execute insertion.insert_account_table('Aarohi', 'Aarohi.r@gmail.com', 9493253818, '56 peterborough', 'Mission Park', 3, null, 1, 34,NULL);
+
 
 -------------------------------------------------------------- Account role mapping history Insertion --------------------------------------------------------
 
