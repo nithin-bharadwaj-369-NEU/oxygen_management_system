@@ -6,6 +6,7 @@ DECLARE
         row_cnt NUMBER;
     BEGIN
         dbms_output.put_line('>>> Firing OXygen Cylinder Plant Table Creation Procedure');
+        
         t_name:='OXYGEN_CYLINDER_PLANT';
         select count(*) into row_cnt from user_tables where table_name = t_name;
         -- dbms_output.put_line(row_cnt);
