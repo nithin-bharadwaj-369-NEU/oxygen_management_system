@@ -1,12 +1,12 @@
 ---- Author Nithin Bharadwaj
 --
-DROP USER TEST_USER_2 CASCADE; 
+--DROP USER TEST_USER_1 CASCADE; 
 --
 DECLARE 
     user_name_to_create VARCHAR2(100);
 BEGIN
         dbms_output.put_line('>>> Creating user using Procedure');
-         user_name_to_create:='TEST_USER_2';
+         user_name_to_create:='TEST_USER_1';
         EXECUTE IMMEDIATE 'create user ' || user_name_to_create || ' identified by Oxygenmanagementsystem123';
         dbms_output.put_line('>>> Allowing user to login');
         EXECUTE IMMEDIATE 'grant connect to ' || user_name_to_create ;

@@ -51,5 +51,5 @@ execute insertion.insert_account_table('Samantha', 'samantha.reddy@gmail.com', 8
 
 --*** Account_Role_Mapping Table INSERTION ***--
 
-select 
+--select 
 

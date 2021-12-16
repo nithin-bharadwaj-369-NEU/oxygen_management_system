@@ -6,7 +6,7 @@
 --2) Create Package Body.
 
 
-DROP PACKAGE INSERTION;
+--DROP PACKAGE INSERTION;
 
 CREATE OR REPLACE PACKAGE INSERTION
 AS
@@ -18,6 +18,9 @@ AS
         county in oxygen_cylinder_plant.county%TYPE, email_id in oxygen_cylinder_plant.EMAIL_ID%TYPE);
     PROCEDURE insert_oxygen_cylinder_details(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                             quantity in oxygen_cylinder_details.quantity%TYPE, available_status IN oxygen_cylinder_details.available_status%TYPE);
+    PROCEDURE update_oxygen_cylinder_details(plant_id_input IN oxygen_cylinder_details.plant_id%TYPE,
+                            cylinder_id_input in oxygen_cylinder_details.cylinder_id%TYPE, 
+                            available_status_data IN oxygen_cylinder_details.available_status%TYPE);
     PROCEDURE insert_payment_status(status_description  IN payment_status.status_description%TYPE);
     PROCEDURE insert_patient_details(covid_report_id IN patient_details.covid_report_id%TYPE,
                             name IN patient_details.name%TYPE, address IN patient_details.address%TYPE,
@@ -257,6 +260,59 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                    dbms_output.put_line(dbms_utility.format_error_stack);
                    dbms_output.put_line('--/\***/\--');
             end insert_oxygen_cylinder_details;
+
+
+        PROCEDURE update_oxygen_cylinder_details(plant_id_input IN oxygen_cylinder_details.plant_id%TYPE,
+                            cylinder_id_input in oxygen_cylinder_details.cylinder_id%TYPE, 
+                            available_status_data IN oxygen_cylinder_details.available_status%TYPE)
+            IS
+                invalid_data_entered EXCEPTION;
+                PRAGMA exception_init( invalid_data_entered, -20009);
+                check_plant_input INT;
+                check_cylinder_input INT;
+            BEGIN
+                IF (available_status_data = 0 or available_status_data = 1 ) THEN
+                    dbms_output.put_line('Entered valid available status');
+                ELSE
+                        raise_application_error(-20009, 'Invalid Available status is entered');
+                END IF;
+                select REGEXP_INSTR(plant_id_input, '[[:digit:]]') into check_plant_input from dual;
+                select REGEXP_INSTR(cylinder_id_input, '[[:digit:]]') into check_cylinder_input from dual;
+    
+                IF (check_plant_input =0 ) THEN
+                    dbms_output.put_line('Entered Invalid Plant id is entered');
+                    raise_application_error(-20009, 'Invalid Plant id is entered');
+                ELSE
+                    dbms_output.put_line('Entered Valid Plant id is entered');
+                END IF;
+                
+                IF (check_cylinder_input =0 ) THEN
+                    dbms_output.put_line('Entered Invalid Cylinder id is entered');
+                    raise_application_error(-20009, 'Invalid Cylinder id is entered');
+                ELSE
+                    dbms_output.put_line('Entered Valid Cylinder id is entered');
+                END IF;
+                
+                dbms_output.put_line('--/\***/\--');
+                update oxygen_cylinder_details
+                set available_status = available_status_data
+                where plant_id = plant_id_input and cylinder_id = cylinder_id_input;
+
+                dbms_output.put_line('Updated Cylinder status in oxygen cylinder details table');
+                dbms_output.put_line('--/\***/\--');
+            commit;
+            exception
+                when dup_val_on_index then
+                   dbms_output.put_line('duplicate value found || insert different value');
+                when others then
+                   dbms_output.put_line('Error while updating data into OXygen Cylidner details Table');
+                    rollback;
+                   dbms_output.put_line('The error encountered is: ');
+                   dbms_output.put_line(dbms_utility.format_error_stack);
+                   dbms_output.put_line('--/\***/\--');
+            end update_oxygen_cylinder_details;
+
+
 
         PROCEDURE insert_payment_status(status_description IN payment_status.status_description%TYPE)
             IS
@@ -642,8 +698,25 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                                 logout_time IN authentication_config.logout_time%TYPE,
                                                 account_id IN authentication_config.account_id%TYPE)
             IS
+                check_account_id NUMBER;
+                id_invalid EXCEPTION;
+                PRAGMA exception_init( id_invalid, -20017 ); --User defined exception  ORA-20000 through ORA-20999
+
             BEGIN
                 dbms_output.put_line('--/\***/\--');
+                    select case when cnt > 0 then 1
+                            else 0 end into check_account_id
+                            from(
+                        select count(account_id) as cnt from account where account_id = account_id
+                        );
+                dbms_output.put_line('Check account Id : ' || check_account_id);
+
+                IF (check_account_id > 0 ) THEN
+                    dbms_output.put_line('Valid Account-id has been entered');
+                ELSE
+                    raise_application_error(-20017,'Invalid Account Entered');
+                END IF;
+
                 insert into authentication_config(SESSION_ID, LOGIN_TIME, IP_ADDRESS, TIME_ZONE_DATA, IS_LOGOUT, LOGOUT_TIME , ACCOUNT_ID)
                         VALUES (DEFAULT, DEFAULT, ip_address_value, timezone_value, logout,  null, account_id) ;
                 dbms_output.put_line('Row inserted into authentication_config table');
@@ -666,8 +739,24 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                                 payment_made_data IN  renter_payment_checkout.payment_made%TYPE,
                                                 payment_due  IN renter_payment_checkout.payment_due%TYPE)
             IS
+                check_account_id NUMBER;
+                id_invalid EXCEPTION;
+                PRAGMA exception_init( id_invalid, -20017 ); --User defined exception  ORA-20000 through ORA-20999
             BEGIN
                 dbms_output.put_line('--/\***/\--');
+                        select case when cnt > 0 then 1
+                            else 0 end into check_account_id
+                            from(
+                        select count(account_id) as cnt from account where account_id = acc_id
+                        );
+                dbms_output.put_line('Check account Id : ' || check_account_id);
+
+                IF (check_account_id > 0 ) THEN
+                    dbms_output.put_line('Valid Account-id has been entered');
+                ELSE
+                    raise_application_error(-20017,'Invalid Account Entered');
+                END IF;
+
                 insert into renter_payment_checkout(transaction_id, payment_method_id, account_id, details, payment_made, payment_due)
                         VALUES (DEFAULT, payment_id, acc_id, details_data, payment_made_data,  payment_due) ;
                 dbms_output.put_line('Row inserted into Renter Payment Checkout table');
@@ -694,8 +783,25 @@ CREATE OR REPLACE PACKAGE BODY INSERTION
                                             booked_date_d  IN orders.booked_date%TYPE,
                                             booking_end_date_d IN orders.booking_end_date%TYPE)
             IS
+                check_account_id NUMBER;
+                id_invalid EXCEPTION;
+                PRAGMA exception_init( id_invalid, -20017 ); --User defined exception  ORA-20000 through ORA-20999
+
             BEGIN
                 dbms_output.put_line('--/\***/\--');
+                     select case when cnt > 0 then 1
+                            else 0 end into check_account_id
+                            from(
+                        select count(account_id) as cnt from account where account_id = acc_id
+                        );
+                dbms_output.put_line('Check account Id : ' || check_account_id);
+
+                IF (check_account_id > 0 ) THEN
+                    dbms_output.put_line('Valid Account-id has been entered');
+                ELSE
+                    raise_application_error(-20017,'Invalid Account Entered');
+                END IF;
+
                 insert into orders(order_id, account_id, rental_price_id, transaction_id, payment_status_code, cylinder_id, plant_id , covid_report_id,
                                     booked_date, booking_end_date )
                         VALUES (DEFAULT, acc_id, rental_price_id, transaction_process_id, pay_status_code, cylinder_id, plant_id, covid_report_id,

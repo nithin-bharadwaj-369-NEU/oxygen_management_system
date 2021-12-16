@@ -514,8 +514,8 @@ DECLARE
                               payment_method_id NUMERIC(2,0),
                               account_id NUMBER(20,0),
                               details VARCHAR2(500),
-                              payment_made NUMERIC(4,2),
-                              payment_due NUMERIC(4,2),
+                              payment_made NUMBER,
+                              payment_due NUMBER,
                               PRIMARY KEY (transaction_id),
                               CONSTRAINT FK_renter_payment_checkout FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id))' ;
                 EXECUTE IMMEDIATE table_query;

@@ -128,7 +128,7 @@ DECLARE
         select price_id into price_id_data from rental_price where trunc(created_on) = to_date('2021-12-14', 'YYYY-MM-DD');
             dbms_output.put_line('Price-id : ' || price_id_data);
         select  price into current_price from rental_price where price_id = price_id_data;  
-        dbms_output.put_line('Total bill to pay : ' || current_price);
+        dbms_output.put_line('Current Price is at : ' || current_price || '$ Per 100 ml');
     END;
 /
 
@@ -140,10 +140,10 @@ CREATE OR REPLACE FUNCTION calcualte_final_price(quantity in NUMBER, price IN NU
             BEGIN 
                     total_price:= (quantity/100)*price ;
                RETURN total_price; 
-    END; 
+     END; 
 /
 
-CREATE OR REPLACE PROCEDURE order_cylinder_new(account_id_input IN account.account_id%TYPE,
+CREATE OR REPLACE PROCEDURE order_cylinder_new(county_input VARCHAR2 ,account_id_input IN account.account_id%TYPE,
                     quantity_input IN oxygen_cylinder_details.quantity%TYPE, plant_id_input IN oxygen_cylinder_details.plant_id%TYPE,
                     cylinder_id_input IN oxygen_cylinder_details.cylinder_id%TYPE,
                     covid_report_id_input IN patient_details.covid_report_id%TYPE,
@@ -164,7 +164,7 @@ IS
             dbms_output.put_line('Price-id : ' || price_id_data);
                 select  price into current_price from rental_price where price_id = price_id_data;  
                 dbms_output.put_line('Total bill to pay : ' || current_price);
-                insertion.insert_patient_details(covid_report_id_input, patient_name, patient_address, covid_status);
+                insertion.insert_patient_details(covid_report_id_input, patient_name, patient_address, covid_status, county_input);
             dbms_output.put_line('Choose method to pay ' );
 
             dbms_output.put_line('>>> Possible Payment methods ');
@@ -172,10 +172,10 @@ IS
                 dbms_output.put_line('>>> Choose 2 for Debit Card ');
                 dbms_output.put_line('>>> Choose 3 for E-check ');
                 dbms_output.put_line('>>> Choose 4 for Paypal ');
-            payment_method_id:=1;
-            final_price:=calcualte_final_price(quantity_input, current_price);
-            final_paid_amt:= final_price;
-            fina_due_amt:=0;
+                payment_method_id:=1;
+                final_price:=calcualte_final_price(quantity_input, current_price);
+                final_paid_amt:= final_price;
+                final_due_amt:=0;
             insertion.insert_renter_payment_checkout(payment_method_id, 1, 'Need the oxygen ASAP', final_paid_amt, final_due_amt);
             select max(transaction_id) into transaction_id_to_use  from renter_payment_checkout ;
               IF final_due_amt >0 THEN
@@ -183,12 +183,17 @@ IS
               ELSIF final_due_amt = 0 THEN    
                     payment_status_code:=1;
                 END IF;
-        insert.insert_order(1, price_id_data, transaction_id_to_use, payment_status_code, cylinder_id_input, plant_id_input, covid_report_id_input, SYSDATE, SYSDATE +15 );
+            dbms_output.put_line('>>> Payment Status Code : ' || payment_status_code);
+        insertion.insert_order(account_id_input, price_id_data, transaction_id_to_use, payment_status_code, cylinder_id_input, plant_id_input, covid_report_id_input, SYSDATE, SYSDATE +15 );
+        IF final_due_amt =0 THEN
+            insertion.update_oxygen_cylinder_details(plant_id_input, cylinder_id_input, 0);
+        END IF;
     END;
 /
 
+
 BEGIN
-        order_cylinder_new(1, 500, 1, 1, 92345600, 'Vamratha', 'pasdataksda andkj',  0);
+        order_cylinder_new('Sufflok', 36, 500, 1, 1, 32190110, 'Vamratha', 'pasdataksda andkj',  1);
 END;
 /
 
