@@ -1,6 +1,6 @@
 --Defined steps before creating Packages
 
-INSERT
+
 
 --1) Create Package Specs
 --2) Create Package Body.
