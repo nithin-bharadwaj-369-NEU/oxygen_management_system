@@ -48,3 +48,7 @@ This repo has schema and the necessary code to populate data for working of oxyg
 #### <ins>Step 8</ins> 
 - After running the trigger scripts, run the 8_testcases.sql file 
     - This script is used to validate the error handling of the data when invalid data is given as input.
+#### <ins>Step 9</ins> 
+- After running the trigger scripts, run the 10_demo.sql file 
+    - This script is used to showcase the functionality of the system
+    

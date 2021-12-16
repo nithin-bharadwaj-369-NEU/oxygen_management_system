@@ -1,5 +1,5 @@
 SET SERVEROUTPUT ON;
-
+-- >>>Step 1 : Account Setup
 CREATE OR REPLACE PROCEDURE account_setup(
             display_name IN Account.display_name%TYPE,
             email_id  IN Account.email_id%TYPE,
@@ -49,7 +49,7 @@ BEGIN
          END;         
 END;
 /
-
+--- >> Step 2 : Run the below procedure to login and create an entry in authentication_config
 create or replace procedure login(account_id IN account.account_id%TYPE)
 IS
    ip_address VARCHAR2(200):=trunc(dbms_random.value(12,256) ) || '.' || trunc(dbms_random.value(123,256) ) || '.'
@@ -65,7 +65,7 @@ BEGIN
 END;
 /
 
-
+--- >> Step 3: If customer run the below to show the inventory
 BEGIN
    -- Customer View the pick up a oxygen plant
         DBMS_OUTPUT.PUT_LINE('>>> Below are the available plants to order. Please select from the below');
@@ -75,18 +75,19 @@ BEGIN
 END;
 /
 
-
+--- >> Step 4: If logged in as oxygen supplier, run the below 
 DECLARE
     plant_id_input INT;
 BEGIN
-    -- If plant admin has logged in to the system
+    -- If oxygen supplier has logged in to the system
     select plant_id into plant_id_input from account where account_id = &account_id;
             dbms_output.put_line('>>> Your plant-id is :  ' || plant_id_input);  
 END;
 /
 
+--- >> Step 5: If logged in as oxygen supplier, run the below
 BEGIN
-    -- If plant admin has logged in to the system
+    -- If oxygen supplier has logged in to the system
             FOR v_rec IN (select plant_id, cylinder_id, quantity, available_status from oxygen_cylinder_details where plant_id = 2 order by plant_id) LOOP       
 --                    dbms_output.put_line(v_rec.available_status);
                     dbms_output.put_line('Plant-Id=' || v_rec.plant_id || ' , Cylinder-Id=' || v_rec.cylinder_id || ' , Quantity=' || v_rec.quantity || ' , Available Status : ' || v_rec.available_status );
@@ -94,7 +95,7 @@ BEGIN
         dbms_output.put_line('>>> Above is the available inventory ');  
 END;
 
-
+--- >> Step 6: If logged in as oxygen supplier, to update or insert new data run below
 CREATE OR REPLACE PROCEDURE insert_new_cylinder_data(plant_id IN oxygen_cylinder_details.plant_id%TYPE,
                         quantity IN oxygen_cylinder_details.quantity%TYPE, 
                         available_status IN oxygen_cylinder_details.available_status%TYPE)
@@ -116,9 +117,8 @@ BEGIN
 END;
 /
 
-
+--- >> Step 7: If logged in as customer, run the below
 -- Get the price of the cylinder for customer
-
 
 DECLARE
         price_id_data int;
@@ -132,7 +132,7 @@ DECLARE
     END;
 /
 
-
+--- >> Step 8: If logged in as customer, run the below
 
 CREATE OR REPLACE FUNCTION calcualte_final_price(quantity in NUMBER, price IN NUMBER) 
             RETURN NUMBER IS 
