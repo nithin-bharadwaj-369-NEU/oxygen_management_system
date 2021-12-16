@@ -23,7 +23,11 @@ execute insertion.insert_oxygen_plant_details('HITAM Multispeciality Life suppor
 execute insertion.insert_oxygen_plant_details('Apollo', '881, Boylston Street', 6176859696, 'Franklin', 'josephplant@gmail.com');
 execute insertion.insert_oxygen_plant_details('Kamineni Plant', '179, Rose Street', 6145336790, 'Nantucket', 'josephplant@gmail.com');
 execute insertion.insert_oxygen_plant_details('Miracle Clinic', '120, Longwood', 6111159696, 'Norfolk', 'josephplant@gmail.com');
-execute insertion.insert_oxygen_plant_details('Hope Life Support', '179, Copley', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston helps', '180, baker street', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston cares', '185, tremont street', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston hubs', '123, park street', 6145201790, 'Nantucket', 'josephplant@gmail.com');
+execute insertion.insert_oxygen_plant_details('Boston protect', '126, macys street', 6145201795, 'Nantucket', 'josephplant@gmail.com');
+
 
 
 
@@ -204,6 +208,8 @@ execute insertion.insert_account_table('Nayan', 'nayan.shah@gmail.com', 98334251
 execute insertion.insert_account_table('Dhruv', 'dhruv.asd@gmail.com', 8898123456, 'RTC cross Rd', 'Norflok', 3, null, 1, 32,NULL);
 execute insertion.insert_account_table('Veeramani', 'veera.reddy@gmail.com', 7564890039, 'Prudential St', 'Sufflok', 3, null, 1, 33,NULL);
 execute insertion.insert_account_table('Arun', 'Aarun.r@gmail.com', 8977489389, '56 J Vue', 'Sufflok', 3, null, 1, 34,NULL);
+execute insertion.insert_account_table('Aarohi', 'Aarohi.r@gmail.com', 9493253818, '56 peterborough', 'Mission Park', 3, null, 1, 34,NULL);
+
 
 -------------------------------------------------------------- Account role mapping history Insertion --------------------------------------------------------
 
