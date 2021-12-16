@@ -1,6 +1,16 @@
 --- 1. View Payment Status ---
 
+CREATE OR REPLACE VIEW VwPaymentStatus
+AS
+  SELECT o.Order_ID AS numOfOrders,
+         o.plant_id,
+         Cast(o.booked_date AS TIMESTAMP) AS BookedDate,
+         Cast(o.booking_end_date AS TIMESTAMP) AS BookedEndDate,
+         ps.status_description AS PaymentStatus
 
+  FROM   Orders o
+         JOIN payment_status ps
+           ON o.payment_status_code = ps.payment_status_code;
 ---
 --WHERE  Cast(o.booked_date AS TIMESTAMP) = '09-12-21 09:26:50.12' ;
 --  select * from VwPaymentStatus Where BookedDate = '09-12-21 09:26:50.12' ;
@@ -60,4 +70,3 @@ ON o.plant_id = p.plant_id;
 ---
 
 
-----------------
