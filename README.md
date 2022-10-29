@@ -9,7 +9,7 @@ cylinders in emergency
 
  
 ##  Purpose of the Repo
-This repo has schema and the necessary code to populate data for working of oxygen management system as part of DAMG-6210 course
+This repo has schema and the necessary code to populate data for working of oxygen management system as part of Database course
 
 #### Project implemented under guidence of Professor: Naveen Kuragayala and TA : Sanjit Sateesh
 
